@@ -5,19 +5,19 @@ public typealias ShortVersion = String
 
 
 public struct SPIManifest: Codable, Equatable {
-    var version: Int = 1
-    var builder: Builder
+    public var version: Int = 1
+    public var builder: Builder
 
     public struct Builder: Codable, Equatable {
-        var configs: [BuildConfig]
+        public var configs: [BuildConfig]
 
         public struct BuildConfig: Codable, Equatable {
-            var platform: String?
-            var swiftVersion: ShortVersion?
-            var image: String?
-            var scheme: String?
-            var target: String?
-            var documentationTarget: String?
+            public var platform: String?
+            public var swiftVersion: ShortVersion?
+            public var image: String?
+            public var scheme: String?
+            public var target: String?
+            public var documentationTarget: String?
 
             enum CodingKeys: String, CodingKey {
                 case platform
