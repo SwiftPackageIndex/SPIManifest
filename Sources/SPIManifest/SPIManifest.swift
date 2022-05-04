@@ -1,3 +1,5 @@
+import Foundation
+
 import Yams
 
 
@@ -46,6 +48,10 @@ public struct SPIManifest: Codable, Equatable {
     public init(version: Int = 1, builder: SPIManifest.Builder) {
         self.version = version
         self.builder = builder
+    }
+
+    public init(yml: String) throws {
+        self = try YAMLDecoder().decode(from: yml)
     }
 }
 
