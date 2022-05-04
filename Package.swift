@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "SPI-Manifest",
+    name: "SPIManifest",
     platforms: [.macOS(.v10_15)],
     products: [
         .library(name: "SPIManifest", targets: ["SPIManifest"]),
