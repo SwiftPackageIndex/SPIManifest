@@ -1,17 +1,17 @@
 import Yams
 
 
-typealias ShortVersion = String
+public typealias ShortVersion = String
 
 
-struct SPIManifest: Codable, Equatable {
+public struct SPIManifest: Codable, Equatable {
     var version: Int = 1
     var builder: Builder
 
-    struct Builder: Codable, Equatable {
+    public struct Builder: Codable, Equatable {
         var configs: [BuildConfig]
 
-        struct BuildConfig: Codable, Equatable {
+        public struct BuildConfig: Codable, Equatable {
             var platform: String?
             var swiftVersion: ShortVersion?
             var image: String?
@@ -34,7 +34,7 @@ struct SPIManifest: Codable, Equatable {
 extension SPIManifest {
     static let fileName = ".spi.yml"
 
-    static func load(in directory: String = ".") -> Self? {
+    public static func load(in directory: String = ".") -> Self? {
         let path = directory.hasSuffix("/")
             ? "\(directory)\(fileName)"
             : "\(directory)/\(fileName)"
@@ -47,7 +47,7 @@ extension SPIManifest {
         return manifest
     }
 
-    func config(platform: Platform? = nil, swiftVersion: SwiftVersion? = nil) -> Builder.BuildConfig? {
+    public func config(platform: Platform? = nil, swiftVersion: SwiftVersion? = nil) -> Builder.BuildConfig? {
         switch (platform, swiftVersion) {
             case let (.some(platform), .some(swiftVersion)):
                 return builder.configs
@@ -70,7 +70,7 @@ extension SPIManifest {
         }
     }
 
-    func documentationTarget(platform: Platform, swiftVersion: SwiftVersion) -> String? {
+    public func documentationTarget(platform: Platform, swiftVersion: SwiftVersion) -> String? {
         if let target = config(platform: platform,
                                swiftVersion: swiftVersion)?.documentationTarget {
             return target
@@ -88,7 +88,7 @@ extension SPIManifest {
         }
     }
 
-    func scheme(for platform: Platform) -> String? {
+    public func scheme(for platform: Platform) -> String? {
         if let specific = config(platform: platform)
             .flatMap(\.scheme) {
             return specific
@@ -100,7 +100,7 @@ extension SPIManifest {
             .flatMap(\.scheme)
     }
 
-    func target(for platform: Platform) -> String? {
+    public func target(for platform: Platform) -> String? {
         if let specific = config(platform: platform)
             .flatMap(\.target) {
             return specific

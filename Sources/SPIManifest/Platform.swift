@@ -1,4 +1,4 @@
-enum Platform: String, Codable, CaseIterable {
+public enum Platform: String, Codable, CaseIterable {
     case ios
     case macosSpm           = "macos-spm"
     case macosXcodebuild    = "macos-xcodebuild"

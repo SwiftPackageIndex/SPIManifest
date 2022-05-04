@@ -1,4 +1,4 @@
-enum SwiftVersion: String, Codable {
+public enum SwiftVersion: String, Codable {
     case v5_3 = "5.3.3"
     case v5_4 = "5.4.0"
     case v5_5 = "5.5.2"
@@ -7,7 +7,7 @@ enum SwiftVersion: String, Codable {
 
 
 extension SwiftVersion {
-    var xcodeVersion: String {
+    public var xcodeVersion: String {
         switch self {
             case .v5_3:
                 return "Xcode-12.4.0"
@@ -21,7 +21,7 @@ extension SwiftVersion {
         }
     }
 
-    var dockerImage: String {
+    public var dockerImage: String {
         switch self {
             case .v5_3:
                 return "swift:5.3"
@@ -34,11 +34,11 @@ extension SwiftVersion {
         }
     }
 
-    var developerDir: String {
+    public var developerDir: String {
         "/Applications/\(xcodeVersion).app"
     }
 
-    var shortVersion: String {
+    public var shortVersion: String {
         switch self {
             case .v5_3:
                 return "5.3"
@@ -54,7 +54,7 @@ extension SwiftVersion {
 
 
 extension SwiftVersion: CaseIterable {
-    static var latest: Self { SwiftVersion.allCases.last! }
+    public static var latest: Self { SwiftVersion.allCases.last! }
 
-    var isLatest: Bool { self == Self.latest }
+    public var isLatest: Bool { self == Self.latest }
 }
