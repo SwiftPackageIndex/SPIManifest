@@ -27,7 +27,25 @@ public struct SPIManifest: Codable, Equatable {
                 case target
                 case documentationTarget = "documentation_target"
             }
+
+            public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTarget: String? = nil) {
+                self.platform = platform
+                self.swiftVersion = swiftVersion
+                self.image = image
+                self.scheme = scheme
+                self.target = target
+                self.documentationTarget = documentationTarget
+            }
         }
+
+        public init(configs: [SPIManifest.Builder.BuildConfig]) {
+            self.configs = configs
+        }
+    }
+
+    public init(version: Int = 1, builder: SPIManifest.Builder) {
+        self.version = version
+        self.builder = builder
     }
 }
 
