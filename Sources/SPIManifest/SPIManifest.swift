@@ -32,7 +32,7 @@ public struct SPIManifest: Codable, Equatable {
 }
 
 extension SPIManifest {
-    static let fileName = ".spi.yml"
+    public static let fileName = ".spi.yml"
 
     public static func load(in directory: String = ".") -> Self? {
         let path = directory.hasSuffix("/")
