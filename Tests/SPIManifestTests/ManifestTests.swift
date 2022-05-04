@@ -4,10 +4,10 @@ import XCTest
 import Yams
 
 
-class SPIManifestTests: XCTestCase {
+class ManifestTests: XCTestCase {
 
     func test_encode_manifest() throws {
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
         ]))
         let str = try YAMLEncoder().encode(m)
@@ -36,11 +36,11 @@ class SPIManifestTests: XCTestCase {
         }
 
         // MUT
-        let m = SPIManifest.load()
+        let m = Manifest.load()
 
         // validation
         XCTAssertEqual(m,
-                       SPIManifest(builder: .init(configs: [
+                       Manifest(builder: .init(configs: [
                         .init(platform: Platform.watchos.rawValue,
                               scheme: "Alamofire watchOS")
                        ]))
@@ -59,7 +59,7 @@ class SPIManifestTests: XCTestCase {
                 """
 
             // MUT
-            let m = try YAMLDecoder().decode(SPIManifest.self, from: yml)
+            let m = try YAMLDecoder().decode(Manifest.self, from: yml)
 
             // validate
             for p in Platform.allCases {
@@ -72,7 +72,7 @@ class SPIManifestTests: XCTestCase {
     func test_config_platform_swiftVersion() throws {
         // Test `config` selector
         do {  // match
-            let m = SPIManifest(builder: .init(configs: [
+            let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.ios.rawValue,
                       swiftVersion: "5.6")
             ]))
@@ -82,7 +82,7 @@ class SPIManifestTests: XCTestCase {
         }
 
         do {  // no matching platform
-            let m = SPIManifest(builder: .init(configs: [
+            let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.linux.rawValue)
             ]))
 
@@ -91,7 +91,7 @@ class SPIManifestTests: XCTestCase {
         }
 
         do {  // no matching version
-            let m = SPIManifest(builder: .init(configs: [
+            let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.linux.rawValue),
                 .init(platform: Platform.ios.rawValue)
             ]))
@@ -101,7 +101,7 @@ class SPIManifestTests: XCTestCase {
         }
 
         do {  // pick specific swift version over nil one
-            let m = SPIManifest(builder: .init(configs: [
+            let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.ios.rawValue, scheme: "scheme-1"),
                 .init(platform: Platform.ios.rawValue, swiftVersion: "5.6", scheme: "scheme-2")
             ]))
@@ -113,7 +113,7 @@ class SPIManifestTests: XCTestCase {
 
     func test_config_platform() throws {
         // Test `config` selector
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.linux.rawValue),
             .init(platform: Platform.ios.rawValue, swiftVersion: "5.5", scheme: "scheme-1"),
             .init(platform: Platform.ios.rawValue, scheme: "scheme-2")
@@ -125,7 +125,7 @@ class SPIManifestTests: XCTestCase {
 
     func test_config_swiftVersion() throws {
         // Test `config` selector
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.linux.rawValue),
             .init(platform: Platform.ios.rawValue, swiftVersion: "5.6", scheme: "scheme-1"),
             .init(platform: Platform.ios.rawValue, scheme: "scheme-2")
@@ -136,7 +136,7 @@ class SPIManifestTests: XCTestCase {
     }
 
     func test_documentationTarget() throws {
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(documentationTargets: ["t0"]),
             .init(platform: Platform.ios.rawValue, documentationTargets: ["t1"]),
             .init(platform: Platform.watchos.rawValue, documentationTargets: ["t2"]),
@@ -150,8 +150,8 @@ class SPIManifestTests: XCTestCase {
     }
 
     func test_documentationTarget_default_swiftVersion() throws {
-        // Ensure an SPIManifest without Swift version specified matches latest
-        let m = SPIManifest(builder: .init(configs: [
+        // Ensure a Manifest without Swift version specified matches latest
+        let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.ios.rawValue, documentationTargets: ["t0"]),
         ]))
 
@@ -161,7 +161,7 @@ class SPIManifestTests: XCTestCase {
     }
 
     func test_scheme() throws {
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
         ]))
 
@@ -171,7 +171,7 @@ class SPIManifestTests: XCTestCase {
     }
 
     func test_scheme_all_platforms() throws {
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: nil, scheme: "Custom scheme")
         ]))
 
@@ -181,7 +181,7 @@ class SPIManifestTests: XCTestCase {
     }
 
     func test_target() throws {
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.macosSpm.rawValue, target: "foo bar")
         ]))
 
@@ -191,7 +191,7 @@ class SPIManifestTests: XCTestCase {
     }
 
     func test_target_all_platforms() throws {
-        let m = SPIManifest(builder: .init(configs: [
+        let m = Manifest(builder: .init(configs: [
             .init(platform: nil, target: "Custom target")
         ]))
 
@@ -218,7 +218,7 @@ class SPIManifestTests: XCTestCase {
         }
 
         // MUT
-        let m = SPIManifest.load()
+        let m = Manifest.load()
 
         // validate
         XCTAssertEqual(m?.scheme(for: .ios), "ComposableArchitecture")

@@ -6,7 +6,7 @@ import Yams
 public typealias ShortVersion = String
 
 
-public struct SPIManifest: Codable, Equatable {
+public struct Manifest: Codable, Equatable {
     public var version: Int = 1
     public var builder: Builder
 
@@ -40,12 +40,12 @@ public struct SPIManifest: Codable, Equatable {
             }
         }
 
-        public init(configs: [SPIManifest.Builder.BuildConfig]) {
+        public init(configs: [Manifest.Builder.BuildConfig]) {
             self.configs = configs
         }
     }
 
-    public init(version: Int = 1, builder: SPIManifest.Builder) {
+    public init(version: Int = 1, builder: Manifest.Builder) {
         self.version = version
         self.builder = builder
     }
@@ -55,7 +55,7 @@ public struct SPIManifest: Codable, Equatable {
     }
 }
 
-extension SPIManifest {
+extension Manifest {
     public static let fileName = ".spi.yml"
 
     public static func load(in directory: String = ".") -> Self? {
