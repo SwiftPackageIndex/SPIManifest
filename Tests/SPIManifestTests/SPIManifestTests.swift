@@ -137,27 +137,27 @@ class SPIManifestTests: XCTestCase {
 
     func test_documentationTarget() throws {
         let m = SPIManifest(builder: .init(configs: [
-            .init(documentationTarget: "t0"),
-            .init(platform: Platform.ios.rawValue, documentationTarget: "t1"),
-            .init(platform: Platform.watchos.rawValue, documentationTarget: "t2"),
-            .init(platform: Platform.watchos.rawValue, swiftVersion: "5.6", documentationTarget: "t3"),
+            .init(documentationTargets: ["t0"]),
+            .init(platform: Platform.ios.rawValue, documentationTargets: ["t1"]),
+            .init(platform: Platform.watchos.rawValue, documentationTargets: ["t2"]),
+            .init(platform: Platform.watchos.rawValue, swiftVersion: "5.6", documentationTargets: ["t3"]),
         ]))
 
         // MUT
-        XCTAssertEqual(m.documentationTarget(platform: .watchos, swiftVersion: .v5_6), "t3")
-        XCTAssertEqual(m.documentationTarget(platform: .watchos, swiftVersion: .v5_5), nil)
-        XCTAssertEqual(m.documentationTarget(platform: .macosSpm, swiftVersion: .v5_6), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_6), ["t3"])
+        XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_5), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_6), nil)
     }
 
     func test_documentationTarget_default_swiftVersion() throws {
         // Ensure an SPIManifest without Swift version specified matches latest
         let m = SPIManifest(builder: .init(configs: [
-            .init(platform: Platform.ios.rawValue, documentationTarget: "t0"),
+            .init(platform: Platform.ios.rawValue, documentationTargets: ["t0"]),
         ]))
 
         // MUT
-        XCTAssertEqual(m.documentationTarget(platform: .ios, swiftVersion: .latest), "t0")
-        XCTAssertEqual(m.documentationTarget(platform: .macosSpm, swiftVersion: .latest), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .ios, swiftVersion: .latest), ["t0"])
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .latest), nil)
     }
 
     func test_scheme() throws {
