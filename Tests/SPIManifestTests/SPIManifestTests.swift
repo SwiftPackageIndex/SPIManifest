@@ -225,8 +225,3 @@ class SPIManifestTests: XCTestCase {
     }
 
 }
-
-
-private extension Dictionary {
-    func get(_ key: Key) -> Value? { self[key] }
-}
