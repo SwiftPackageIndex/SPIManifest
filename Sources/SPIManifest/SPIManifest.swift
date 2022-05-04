@@ -19,7 +19,7 @@ public struct SPIManifest: Codable, Equatable {
             public var image: String?
             public var scheme: String?
             public var target: String?
-            public var documentationTarget: String?
+            public var documentationTargets: [String]?
 
             enum CodingKeys: String, CodingKey {
                 case platform
@@ -27,16 +27,16 @@ public struct SPIManifest: Codable, Equatable {
                 case image
                 case scheme
                 case target
-                case documentationTarget = "documentation_target"
+                case documentationTargets = "documentation_targets"
             }
 
-            public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTarget: String? = nil) {
+            public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTargets: [String]? = nil) {
                 self.platform = platform
                 self.swiftVersion = swiftVersion
                 self.image = image
                 self.scheme = scheme
                 self.target = target
-                self.documentationTarget = documentationTarget
+                self.documentationTargets = documentationTargets
             }
         }
 
@@ -94,9 +94,9 @@ extension SPIManifest {
         }
     }
 
-    public func documentationTarget(platform: Platform, swiftVersion: SwiftVersion) -> String? {
+    public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
         if let target = config(platform: platform,
-                               swiftVersion: swiftVersion)?.documentationTarget {
+                               swiftVersion: swiftVersion)?.documentationTargets {
             return target
         }
 
@@ -105,7 +105,7 @@ extension SPIManifest {
         // documentation build and allow authors to skip specifying a Swift version in their
         // manifest, automatically always building their docs with the latest Swift version.
         if swiftVersion == .latest,
-           let target = config(platform: platform)?.documentationTarget {
+           let target = config(platform: platform)?.documentationTargets {
             return target
         } else {
             return nil
