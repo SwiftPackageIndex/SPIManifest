@@ -78,7 +78,7 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertNotNil(m.config(platform: .ios, swiftVersion: .v5_6))
+            XCTAssertNotNil(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6)))
         }
 
         do {  // no matching platform
@@ -87,7 +87,7 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertNil(m.config(platform: .ios, swiftVersion: .v5_6))
+            XCTAssertNil(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6)))
         }
 
         do {  // no matching version
@@ -97,7 +97,7 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertNil(m.config(platform: .ios, swiftVersion: .v5_6))
+            XCTAssertNil(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6)))
         }
 
         do {  // pick specific swift version over nil one
@@ -107,7 +107,7 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertEqual(m.config(platform: .ios, swiftVersion: .v5_6)?.scheme, "scheme-2")
+            XCTAssertEqual(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6))?.scheme, "scheme-2")
         }
     }
 
@@ -120,7 +120,7 @@ class ManifestTests: XCTestCase {
         ]))
 
         // MUT
-        XCTAssertEqual(m.config(platform: .ios)?.scheme, "scheme-1")
+        XCTAssertEqual(m.config(platform: .specific(.ios))?.scheme, "scheme-1")
     }
 
     func test_config_swiftVersion() throws {
@@ -132,7 +132,7 @@ class ManifestTests: XCTestCase {
         ]))
 
         // MUT
-        XCTAssertEqual(m.config(swiftVersion: .v5_6)?.scheme, "scheme-1")
+        XCTAssertEqual(m.config(swiftVersion: .specific(.v5_6))?.scheme, "scheme-1")
     }
 
     func test_documentationTargets() throws {

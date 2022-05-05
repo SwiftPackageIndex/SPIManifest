@@ -71,22 +71,45 @@ extension Manifest {
         return manifest
     }
 
-    public func config(platform: Platform? = nil, swiftVersion: SwiftVersion? = nil) -> Builder.BuildConfig? {
+    public enum Selection<T> {
+        case any
+        case specific(T)
+        case none
+    }
+
+    public func config(platform: Selection<Platform> = .any, swiftVersion: Selection<SwiftVersion> = .any) -> Builder.BuildConfig? {
         switch (platform, swiftVersion) {
-            case let (.some(platform), .some(swiftVersion)):
+            case (.any, .any):
+                return builder.configs.first
+
+            case let (.specific(platform), .specific(swiftVersion)):
                 return builder.configs
                     .first {
                         $0.platform == platform.rawValue
                         && $0.swiftVersion == swiftVersion.shortVersion
                     }
 
-            case let (.some(platform), .none):
+            case let (.specific(platform), .any):
                 return builder.configs
                     .first { $0.platform == platform.rawValue }
 
-            case let (.none, .some(swiftVersion)):
+            case let (.specific(platform), .none):
+                return builder.configs
+                    .first { $0.platform == platform.rawValue && $0.swiftVersion == nil }
+
+            case let (.any, .specific(swiftVersion)):
                 return builder.configs
                     .first { $0.swiftVersion == swiftVersion.shortVersion }
+
+            case let (.none, .specific(swiftVersion)):
+                return builder.configs
+                    .first { $0.platform == nil && $0.swiftVersion == swiftVersion.shortVersion }
+
+            case (.any, .none):
+                return builder.configs.first { $0.swiftVersion == nil }
+
+            case (.none, .any):
+                return builder.configs.first { $0.platform == nil }
 
             case (.none, .none):
                 return builder.configs
@@ -103,8 +126,8 @@ extension Manifest {
     }
 
     public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
-        if let target = config(platform: platform,
-                               swiftVersion: swiftVersion)?.documentationTargets {
+        if let target = config(platform: .specific(platform),
+                               swiftVersion: .specific(swiftVersion))?.documentationTargets {
             return target
         }
 
@@ -113,7 +136,7 @@ extension Manifest {
         // documentation build and allow authors to skip specifying a Swift version in their
         // manifest, automatically always building their docs with the latest Swift version.
         if swiftVersion == .latest,
-           let target = config(platform: platform)?.documentationTargets {
+           let target = config(platform: .specific(platform))?.documentationTargets {
             return target
         } else {
             return nil
@@ -121,7 +144,7 @@ extension Manifest {
     }
 
     public func scheme(for platform: Platform) -> String? {
-        if let specific = config(platform: platform)
+        if let specific = config(platform: .specific(platform))
             .flatMap(\.scheme) {
             return specific
         }
@@ -133,7 +156,7 @@ extension Manifest {
     }
 
     public func target(for platform: Platform) -> String? {
-        if let specific = config(platform: platform)
+        if let specific = config(platform: .specific(platform))
             .flatMap(\.target) {
             return specific
         }
