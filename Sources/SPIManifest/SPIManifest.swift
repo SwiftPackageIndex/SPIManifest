@@ -94,6 +94,14 @@ extension Manifest {
         }
     }
 
+    public func allDocumentationTargets() -> [String]? {
+        Set(
+            builder.configs.reduce([String]()) { partialResult, config in
+                partialResult + (config.documentationTargets ?? [])
+            }
+        ).sorted()
+    }
+
     public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
         if let target = config(platform: platform,
                                swiftVersion: swiftVersion)?.documentationTargets {

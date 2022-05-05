@@ -135,7 +135,7 @@ class ManifestTests: XCTestCase {
         XCTAssertEqual(m.config(swiftVersion: .v5_6)?.scheme, "scheme-1")
     }
 
-    func test_documentationTarget() throws {
+    func test_documentationTargets() throws {
         let m = Manifest(builder: .init(configs: [
             .init(documentationTargets: ["t0"]),
             .init(platform: Platform.ios.rawValue, documentationTargets: ["t1"]),
@@ -149,7 +149,7 @@ class ManifestTests: XCTestCase {
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_6), nil)
     }
 
-    func test_documentationTarget_default_swiftVersion() throws {
+    func test_documentationTargets_default_swiftVersion() throws {
         // Ensure a Manifest without Swift version specified matches latest
         let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.ios.rawValue, documentationTargets: ["t0"]),
@@ -158,6 +158,45 @@ class ManifestTests: XCTestCase {
         // MUT
         XCTAssertEqual(m.documentationTargets(platform: .ios, swiftVersion: .latest), ["t0"])
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .latest), nil)
+    }
+
+    func test_allDocumentationTargets() throws {
+        // Test extracting a list of all documentation targets
+        do {
+            let m = try Manifest(yml: """
+                version: 1
+                builder:
+                  configs:
+                  - documentation_targets: [t0]
+                """)
+            XCTAssertEqual(m.allDocumentationTargets(), ["t0"])
+        }
+        do {
+            let m = try Manifest(yml: """
+                version: 1
+                builder:
+                  configs:
+                  - documentation_targets: [t0]
+                  - documentation_targets: [t0]
+                """)
+            XCTAssertEqual(m.allDocumentationTargets(), ["t0"])
+        }
+        do {
+            let m = try Manifest(yml: """
+                version: 1
+                builder:
+                  configs:
+                  - documentation_targets: [t0]
+                  - platform: ios
+                    documentation_targets: [t1]
+                  - platform: watchos
+                    documentation_targets: [t2]
+                  - platform: watchos
+                    swift_version: '5.6'
+                    documentation_targets: [t3]
+                """)
+            XCTAssertEqual(m.allDocumentationTargets(), ["t0", "t1", "t2", "t3"])
+        }
     }
 
     func test_scheme() throws {
