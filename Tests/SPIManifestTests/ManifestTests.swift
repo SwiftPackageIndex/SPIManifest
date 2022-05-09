@@ -135,29 +135,146 @@ class ManifestTests: XCTestCase {
         XCTAssertEqual(m.config(swiftVersion: .specific(.v5_6))?.scheme, "scheme-1")
     }
 
-    func test_documentationTargets() throws {
-        let m = Manifest(builder: .init(configs: [
-            .init(documentationTargets: ["t0"]),
-            .init(platform: Platform.ios.rawValue, documentationTargets: ["t1"]),
-            .init(platform: Platform.watchos.rawValue, documentationTargets: ["t2"]),
-            .init(platform: Platform.watchos.rawValue, swiftVersion: "5.6", documentationTargets: ["t3"]),
-        ]))
+    func test_documentationTargets_bare_default() throws {
+        // Ensure a "bare" documentation target setting only "selects" for macos-spm/latest
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets: [t0]
+            """
+        )
+
+        for s in SwiftVersion.allCases {
+            for p in Platform.allCases {
+                if p == .macosSpm && s == .latest {
+                    XCTAssertEqual(
+                        m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
+                        "failed for (\(p), \(s))"
+                    )
+                } else {
+                    XCTAssertEqual(
+                        m.documentationTargets(platform: p, swiftVersion: s), nil,
+                        "failed for (\(p), \(s))"
+                    )
+                }
+            }
+        }
+    }
+
+    func test_documentationTargets_platform_default() throws {
+        // Ensure a "platform specific" documentation target setting only "selects" for platform/latest
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets: [t0]
+                platform: ios
+            """
+        )
+
+        for s in SwiftVersion.allCases {
+            for p in Platform.allCases {
+                if p == .ios && s == .latest {
+                    XCTAssertEqual(
+                        m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
+                        "failed for (\(p), \(s))"
+                    )
+                } else {
+                    XCTAssertEqual(
+                        m.documentationTargets(platform: p, swiftVersion: s), nil,
+                        "failed for (\(p), \(s))"
+                    )
+                }
+            }
+        }
+    }
+
+    func test_documentationTargets_swiftVersion_default() throws {
+        // Ensure a "swiftVersion specific" documentation target setting only "selects" for macos-spm/swiftVersion
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets: [t0]
+                swift_version: 5.5
+            """
+        )
+
+        for s in SwiftVersion.allCases {
+            for p in Platform.allCases {
+                if p == .macosSpm && s == .v5_5 {
+                    XCTAssertEqual(
+                        m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
+                        "failed for (\(p), \(s))"
+                    )
+                } else {
+                    XCTAssertEqual(
+                        m.documentationTargets(platform: p, swiftVersion: s), nil,
+                        "failed for (\(p), \(s))"
+                    )
+                }
+            }
+        }
+    }
+
+    func test_documentationTargets_multiple_default() throws {
+        // Ensure that if multiple underspecified documentation target settings are present, the platform one is selected (i.e. we build for the latest Swift version)
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets: [t0]
+                swift_version: 5.5
+              - documentation_targets: [t0]
+                platform: ios
+            """
+        )
+
+        for s in SwiftVersion.allCases {
+            for p in Platform.allCases {
+                switch (p, s) {
+                    case (.ios, .latest), (.macosSpm, .v5_5):
+                        XCTAssertEqual(
+                            m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
+                            "failed for (\(p), \(s))"
+                        )
+
+                    default:
+                        XCTAssertEqual(
+                            m.documentationTargets(platform: p, swiftVersion: s), nil,
+                            "failed for (\(p), \(s))"
+                        )
+                }
+            }
+        }
+    }
+
+    func test_documentationTargets_complex() throws {
+        // Tests a more complex configuration
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets:
+                - t0
+              - platform: ios
+                documentation_targets:
+                - t1
+              - platform: watchos
+                documentation_targets:
+                - t2
+              - platform: watchos
+                swift_version: '5.6'
+                documentation_targets:
+                - t3
+            """
+        )
 
         // MUT
         XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_6), ["t3"])
         XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_5), nil)
-        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_6), nil)
-    }
-
-    func test_documentationTargets_default_swiftVersion() throws {
-        // Ensure a Manifest without Swift version specified matches latest
-        let m = Manifest(builder: .init(configs: [
-            .init(platform: Platform.ios.rawValue, documentationTargets: ["t0"]),
-        ]))
-
-        // MUT
-        XCTAssertEqual(m.documentationTargets(platform: .ios, swiftVersion: .latest), ["t0"])
-        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .latest), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_6), ["t0"])
     }
 
     func test_allDocumentationTargets() throws {
