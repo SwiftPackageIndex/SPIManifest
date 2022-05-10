@@ -126,21 +126,34 @@ extension Manifest {
     }
 
     public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
-        if let target = config(platform: .specific(platform),
+        // Return an exact match if there is one
+        if let targets = config(platform: .specific(platform),
                                swiftVersion: .specific(swiftVersion))?.documentationTargets {
-            return target
+            return targets
         }
 
-        // Only for the latest Swift version accept a config without a specified Swift version.
-        // This will ensure that Swift versions other than the latest will not trigger a
-        // documentation build and allow authors to skip specifying a Swift version in their
-        // manifest, automatically always building their docs with the latest Swift version.
+        // Next, if the Swift version is the latest, try to find a platform match without a fixed Swift version
         if swiftVersion == .latest,
-           let target = config(platform: .specific(platform))?.documentationTargets {
-            return target
-        } else {
-            return nil
+           let targets =  config(platform: .specific(platform),
+                                 swiftVersion: .none)?.documentationTargets {
+            return targets
         }
+
+        // Next, if the platform is the preferred docc platform (macosSpm), try to find a Swift version match without a fixed platform
+        if platform == .macosSpm,
+           let targets =  config(platform: .none,
+                                 swiftVersion: .specific(swiftVersion))?.documentationTargets {
+            return targets
+        }
+
+        // Finally, if the platform is the preferred docc platform (macosSpm) and the Swift version is the latest, try to find a config match without any platform or Swift version
+        if platform == .macosSpm,
+           swiftVersion == .latest,
+           let targets = config(platform: .none, swiftVersion: .none)?.documentationTargets {
+            return targets
+        }
+
+        return nil
     }
 
     public func scheme(for platform: Platform) -> String? {
