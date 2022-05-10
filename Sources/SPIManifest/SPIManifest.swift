@@ -57,14 +57,16 @@ public struct Manifest: Codable, Equatable {
 
 extension Manifest {
     public static let fileName = ".spi.yml"
+    public static let maxByteSize = 1_000
 
-    public static func load(in directory: String = ".") -> Self? {
+    public static func load(in directory: String = ".", maxByteSize: Int = Self.maxByteSize) -> Self? {
         let path = directory.hasSuffix("/")
             ? "\(directory)\(fileName)"
             : "\(directory)/\(fileName)"
         guard
             Current.fileManager.fileExists(path),
             let data = Current.fileManager.contents(path),
+            data.count <= maxByteSize,
             let manifest = try? YAMLDecoder().decode(Self.self, from: data)
         else { return nil }
 

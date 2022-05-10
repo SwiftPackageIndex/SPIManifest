@@ -47,6 +47,24 @@ class ManifestTests: XCTestCase {
         )
     }
 
+    func test_load_maxSize() throws {
+        let data = Data("""
+                version: 1
+                builder:
+                  configs:
+                  - platform: macosSpm
+                    swift_version: 5.6
+                    scheme: Some scheme
+                """.utf8)
+        XCTAssertEqual(data.count, 100)
+        Current.fileManager.fileExists = { _ in true }
+        Current.fileManager.contents = { _ in data }
+
+        // MUT
+        XCTAssertNotNil(Manifest.load(maxByteSize: 100))
+        XCTAssertNotNil(Manifest.load(maxByteSize: 101))
+    }
+
     func test_manifests() throws {
         // Syntax check some manifest variants
         do {
