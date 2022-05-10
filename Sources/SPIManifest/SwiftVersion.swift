@@ -7,37 +7,6 @@ public enum SwiftVersion: String, Codable {
 
 
 extension SwiftVersion {
-    public var xcodeVersion: String {
-        switch self {
-            case .v5_3:
-                return "Xcode-12.4.0"
-            case .v5_4:
-                return "Xcode-12.5.1"
-            case .v5_5:
-                return "Xcode-13.2.1"
-            case .v5_6:
-                // Update the Xcode version in the Makefile when changing this version
-                return "Xcode-13.3.0"
-        }
-    }
-
-    public var dockerImage: String {
-        switch self {
-            case .v5_3:
-                return "swift:5.3"
-            case .v5_4:
-                return "swift:5.4"
-            case .v5_5:
-                return "swift:5.5.2"
-            case .v5_6:
-                return "swift:5.6.0"
-        }
-    }
-
-    public var developerDir: String {
-        "/Applications/\(xcodeVersion).app"
-    }
-
     public var shortVersion: String {
         switch self {
             case .v5_3:
