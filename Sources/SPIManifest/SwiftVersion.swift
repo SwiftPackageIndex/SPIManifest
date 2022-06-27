@@ -2,7 +2,7 @@ public enum SwiftVersion: String, Codable {
     case v5_3 = "5.3.3"
     case v5_4 = "5.4.0"
     case v5_5 = "5.5.2"
-    case v5_6 = "5.6.0"
+    case v5_6 = "5.6.2"
 }
 
 
