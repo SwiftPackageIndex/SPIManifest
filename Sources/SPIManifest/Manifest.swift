@@ -3,9 +3,6 @@ import Foundation
 import Yams
 
 
-public typealias ShortVersion = String
-
-
 public struct Manifest: Codable, Equatable {
     public var version: Int = 1
     public var builder: Builder
@@ -88,7 +85,7 @@ extension Manifest {
                 return builder.configs
                     .first {
                         $0.platform == platform.rawValue
-                        && $0.swiftVersion == swiftVersion.shortVersion
+                        && $0.swiftVersion == swiftVersion.rawValue
                     }
 
             case let (.specific(platform), .any):
@@ -101,11 +98,11 @@ extension Manifest {
 
             case let (.any, .specific(swiftVersion)):
                 return builder.configs
-                    .first { $0.swiftVersion == swiftVersion.shortVersion }
+                    .first { $0.swiftVersion == swiftVersion.rawValue }
 
             case let (.none, .specific(swiftVersion)):
                 return builder.configs
-                    .first { $0.platform == nil && $0.swiftVersion == swiftVersion.shortVersion }
+                    .first { $0.platform == nil && $0.swiftVersion == swiftVersion.rawValue }
 
             case (.any, .none):
                 return builder.configs.first { $0.swiftVersion == nil }
