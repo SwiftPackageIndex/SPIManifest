@@ -14,3 +14,8 @@ extension SwiftVersion: CaseIterable {
 
     public var isLatest: Bool { self == Self.latest }
 }
+
+
+extension SwiftVersion: CustomStringConvertible {
+    public var description: String { rawValue }
+}
