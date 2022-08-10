@@ -6,6 +6,7 @@ import Yams
 public struct Manifest: Codable, Equatable {
     public var version: Int = 1
     public var builder: Builder
+    public var externalLinks: ExternalLinks?
 
     public struct Builder: Codable, Equatable {
         public var configs: [BuildConfig]
@@ -42,9 +43,16 @@ public struct Manifest: Codable, Equatable {
         }
     }
 
-    public init(version: Int = 1, builder: Manifest.Builder) {
+    public struct ExternalLinks: Codable, Equatable {
+        public var documentation: String?
+    }
+
+    public init(version: Int = 1,
+                builder: Manifest.Builder,
+                externalLinks: Manifest.ExternalLinks? = nil) {
         self.version = version
         self.builder = builder
+        self.externalLinks = externalLinks
     }
 
     public init(yml: String) throws {

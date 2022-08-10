@@ -398,4 +398,17 @@ class ManifestTests: XCTestCase {
         XCTAssertEqual(m?.scheme(for: .ios), "ComposableArchitecture")
     }
 
+    func test_documentationUrl() throws {
+        do {
+            let m = try Manifest(yml: """
+                version: 1
+                external_links:
+                  documentation: https://example.com/package/documentation/
+                """)
+
+            let externalLinks = try XCTUnwrap(m.externalLinks)
+            XCTAssertEqual(externalLinks.documentation, "https://example.com/package/documentation/")
+        }
+    }
+
 }
