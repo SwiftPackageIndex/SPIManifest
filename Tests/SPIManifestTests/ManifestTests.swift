@@ -6,6 +6,10 @@ import Yams
 
 class ManifestTests: XCTestCase {
 
+    func test_empty() throws {
+        XCTAssertNoThrow(try Manifest(yml: "version: 1"))
+    }
+
     func test_encode_manifest() throws {
         let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
@@ -396,6 +400,19 @@ class ManifestTests: XCTestCase {
 
         // validate
         XCTAssertEqual(m?.scheme(for: .ios), "ComposableArchitecture")
+    }
+
+    func test_documentationUrl() throws {
+        do {
+            let m = try Manifest(yml: """
+                version: 1
+                external_links:
+                  documentation: https://example.com/package/documentation/
+                """)
+
+            let externalLinks = try XCTUnwrap(m.externalLinks)
+            XCTAssertEqual(externalLinks.documentation, "https://example.com/package/documentation/")
+        }
     }
 
 }
