@@ -6,6 +6,14 @@ import Yams
 
 class ManifestTests: XCTestCase {
 
+    func test_empty() throws {
+        do {
+            let m = try Manifest(yml: "version: 1")
+            XCTAssertNil(m.builder)
+            XCTAssertNil(m.externalLinks)
+        }
+    }
+
     func test_encode_manifest() throws {
         let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
