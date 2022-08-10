@@ -5,7 +5,7 @@ import Yams
 
 public struct Manifest: Codable, Equatable {
     public var version: Int = 1
-    public var builder: Builder
+    public var builder: Builder?
     public var externalLinks: ExternalLinks?
 
     public struct Builder: Codable, Equatable {
@@ -48,7 +48,7 @@ public struct Manifest: Codable, Equatable {
     }
 
     public init(version: Int = 1,
-                builder: Manifest.Builder,
+                builder: Manifest.Builder? = nil,
                 externalLinks: Manifest.ExternalLinks? = nil) {
         self.version = version
         self.builder = builder
@@ -85,6 +85,8 @@ extension Manifest {
     }
 
     public func config(platform: Selection<Platform> = .any, swiftVersion: Selection<SwiftVersion> = .any) -> Builder.BuildConfig? {
+        guard let builder = builder else { return nil }
+
         switch (platform, swiftVersion) {
             case (.any, .any):
                 return builder.configs.first
@@ -125,7 +127,9 @@ extension Manifest {
     }
 
     public func allDocumentationTargets() -> [String]? {
-        Set(
+        guard let builder = builder else { return nil }
+
+        return Set(
             builder.configs.reduce([String]()) { partialResult, config in
                 partialResult + (config.documentationTargets ?? [])
             }
@@ -164,6 +168,8 @@ extension Manifest {
     }
 
     public func scheme(for platform: Platform) -> String? {
+        guard let builder = builder else { return nil }
+
         if let specific = config(platform: .specific(platform))
             .flatMap(\.scheme) {
             return specific
@@ -176,6 +182,8 @@ extension Manifest {
     }
 
     public func target(for platform: Platform) -> String? {
+        guard let builder = builder else { return nil }
+
         if let specific = config(platform: .specific(platform))
             .flatMap(\.target) {
             return specific
