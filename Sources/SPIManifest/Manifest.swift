@@ -8,6 +8,12 @@ public struct Manifest: Codable, Equatable {
     public var builder: Builder?
     public var externalLinks: ExternalLinks?
 
+    enum CodingKeys: String, CodingKey {
+        case version
+        case builder
+        case externalLinks = "external_links"
+    }
+
     public struct Builder: Codable, Equatable {
         public var configs: [BuildConfig]
 
