@@ -336,6 +336,17 @@ class ManifestTests: XCTestCase {
                 """)
             XCTAssertEqual(m.allDocumentationTargets(), ["t0", "t1", "t2", "t3"])
         }
+        do {
+            // Test maintaining order.
+            let m = try Manifest(yml: """
+                version: 1
+                builder:
+                  configs:
+                  - documentation_targets: [t4, t3, t2]
+                  - documentation_targets: [t2, t1, t0]
+                """)
+            XCTAssertEqual(m.allDocumentationTargets(), ["t4", "t3", "t2", "t1", "t0"])
+        }
     }
 
     func test_scheme() throws {
