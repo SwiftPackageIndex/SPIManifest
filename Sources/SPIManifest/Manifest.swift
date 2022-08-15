@@ -135,11 +135,9 @@ extension Manifest {
     public func allDocumentationTargets() -> [String]? {
         guard let builder = builder else { return nil }
 
-        return Set(
-            builder.configs.reduce([String]()) { partialResult, config in
-                partialResult + (config.documentationTargets ?? [])
-            }
-        ).sorted()
+        return builder.configs.reduce([String]()) { partialResult, config in
+            partialResult + (config.documentationTargets ?? [])
+        }.uniqued()
     }
 
     public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
