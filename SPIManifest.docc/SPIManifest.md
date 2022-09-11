@@ -1,11 +1,16 @@
+---
+date: 2020-10-30 12:00
+title: The Swift Package Index Metadata File – First Steps
+description: The Swift Package Index gathers most of the metadata about a package from external sources. The package manifest, the git repository, and GitHub. But, there are some things we need to know that are specific to the Swift Package Index. Learn how to take advantage of the extra settings available to your package.
+---
 
-## Introduction
-
-The Swift Package Index gathers most of the metadata about a package from external sources. The package manifest, the git repository, and GitHub. But, there are some things we need to know that are specific to the Swift Package Index.
 The vast majority of the information you see in [the package index][1] is generated from a single URL, the location of the package’s git repository.
+
 From that URL we gather data from the repository itself, the package manifest, the GitHub API (yes, it’s GitHub only for now, but [we do plan to support other hosts][2]), and from running builds of the package to check compatibility with operating systems and Swift versions.
 
 ## Edge cases
+
+Of course, as with everything in software development, it’s not long before you find yourself talking about edge cases.
 
 While creating [the build system][3], we quickly encountered packages where watchOS targets failed to build. We use Xcode’s automatic scheme creation functionality while running builds, but Xcode generates schemes that always include test targets, and `XCTest` isn’t available on watchOS. Using automatic schemes for watchOS builds wasn’t going to work.
 
@@ -80,6 +85,13 @@ We expect this file to evolve, which is why it carries a version number. Here ar
 
 More metadata possibilities are under discussion in [this GitHub issue][12]. This is a great place to chime in if you have suggestions.
 
+## File format
+
+We chose `YAML` as the file format because it is an uncontroversial, universally beloved format that is entirely [free of issues][13]. 😬
+
+Seriously though, we chose YAML as it’s relatively easy for a human to read and write, and it’s well supported in Swift. While it has some downsides compared to JSON, we believe it’s a more practical format given that package authors need to create this file manually.
+
+Of course, we’ll let adoption be the guide as to how well it is working in practice!
 
 [1]: https://swiftpackageindex.com
 [2]: https://github.com/SwiftPackageIndex/SwiftPackageIndex-Server/issues/485
@@ -93,3 +105,4 @@ More metadata possibilities are under discussion in [this GitHub issue][12]. Thi
 [10]: https://swiftpackageindex.com/soto-project/soto
 [11]: https://github.com/soto-project/soto/blob/main/.spi.yml
 [12]: https://github.com/SwiftPackageIndex/SwiftPackageIndex-Server/issues/435
+[13]: https://www.arp242.net/yaml-config.html
