@@ -223,7 +223,7 @@ extension Manifest {
     /// - Parameter manifest: input `Manifest`
     private static func fixPlatforms(manifest: inout Manifest) {
         if let builder = manifest.builder {
-            let configs = builder.configs.map { config in
+            let configs = builder.configs.map { config -> Builder.BuildConfig in
                 var config = config
                 if config.platform?.lowercased() == "macos" {
                     config.platform = Platform.macosSpm.rawValue
