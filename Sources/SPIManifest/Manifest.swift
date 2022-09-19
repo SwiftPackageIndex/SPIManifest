@@ -92,8 +92,10 @@ extension Manifest {
             Current.fileManager.fileExists(path),
             let data = Current.fileManager.contents(path),
             data.count <= maxByteSize,
-            let manifest = try? YAMLDecoder().decode(Self.self, from: data)
+            var manifest = try? YAMLDecoder().decode(Self.self, from: data)
         else { return nil }
+
+        Self.fixPlatforms(manifest: &manifest)
 
         return manifest
     }
@@ -213,4 +215,22 @@ extension Manifest {
             .flatMap(\.target)
     }
 
+}
+
+
+extension Manifest {
+    /// Adjust user provided platform inputs to match valid keys. For instance `macos` (which would need to be `macos-spm` to match `Platform.macosSpm`.
+    /// - Parameter manifest: input `Manifest`
+    private static func fixPlatforms(manifest: inout Manifest) {
+        if let builder = manifest.builder {
+            let configs = builder.configs.map { config -> Builder.BuildConfig in
+                var config = config
+                if config.platform?.lowercased() == "macos" {
+                    config.platform = Platform.macosSpm.rawValue
+                }
+                return config
+            }
+            manifest.builder?.configs = configs
+        }
+    }
 }

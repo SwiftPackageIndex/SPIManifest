@@ -440,4 +440,32 @@ class ManifestTests: XCTestCase {
         }
     }
 
+    func test_macos_platform() throws {
+        // Ensure we interpret platform key `macos` as `macos-spm`
+        // https://github.com/SwiftPackageIndex/SPIManifest/issues/11
+        Current.fileManager.fileExists = { _ in true }
+        Current.fileManager.contents = { _ in
+            Data(
+                """
+                version: 1
+                builder:
+                  configs:
+                  - platform: macos
+                    target: foo
+                """.utf8
+            )
+        }
+
+        // MUT
+        let m = Manifest.load()
+
+        // validation
+        XCTAssertEqual(m,
+                       Manifest(builder: .init(configs: [
+                        .init(platform: Platform.macosSpm.rawValue,
+                              target: "foo")
+                       ]))
+        )
+    }
+
 }
