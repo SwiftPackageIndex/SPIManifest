@@ -2,7 +2,9 @@
 
 Examples of common use cases with SPIManifest.
 
-
+@Metadata {
+    @DisplayName("Common Use Cases")
+}
 
 ### Schemes for watchOS
 

@@ -11,7 +11,7 @@ SPIManifest is a Swift package to decode Swift Package Index Manifest files, `.s
 ### Essentials
 
 - ``Manifest``
-- ``CommonUseCases``
+- ``doc:CommonUseCases``
 
 ### Build Types
 
