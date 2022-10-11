@@ -65,6 +65,10 @@ public struct Manifest: Codable, Equatable {
 
     public struct ExternalLinks: Codable, Equatable {
         public var documentation: String?
+
+        public init(documentation: String? = nil) {
+            self.documentation = documentation
+        }
     }
 
     public init(version: Int = 1,
