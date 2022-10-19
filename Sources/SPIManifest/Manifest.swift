@@ -1,4 +1,4 @@
-// Copyright 2020-2021 Dave Verwer, Sven A. Schmidt, and other contributors.
+// Copyright 2020-2022 Dave Verwer, Sven A. Schmidt, and other contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -98,15 +98,55 @@ extension Manifest {
         let path = directory.hasSuffix("/")
             ? "\(directory)\(fileName)"
             : "\(directory)/\(fileName)"
-        guard
-            Current.fileManager.fileExists(path),
-            let data = Current.fileManager.contents(path),
-            data.count <= maxByteSize,
-            var manifest = try? YAMLDecoder().decode(Self.self, from: data)
-        else { return nil }
+        return try? load(at: path)
+    }
+
+    public static func load(at path: String) throws -> Self {
+        guard Current.fileManager.fileExists(atPath: path) else {
+            throw ManifestError.invalidPath(path: path)
+        }
+
+        guard let data = Current.fileManager.contents(path) else {
+            throw ManifestError.noData
+        }
+
+        guard data.count <= maxByteSize else {
+            throw ManifestError.fileTooLarge(size: data.count)
+        }
+
+        var manifest: Self
+        do {
+            manifest = try YAMLDecoder().decode(Self.self, from: data)
+        } catch let error as DecodingError {
+            switch error {
+                case let .typeMismatch(_, context):
+                    throw ManifestError.decodingError("""
+                        Error at path '\(context.codingPath.map(\.stringValue).joined(separator: "."))': \(context.debugDescription).
+                        """)
+
+                case let .valueNotFound(_, context):
+                    throw ManifestError.decodingError("""
+                        Error at path '\(context.codingPath.map(\.stringValue).joined(separator: "."))': \(context.debugDescription).
+                        """)
+
+                case let .keyNotFound(key, _):
+                    throw ManifestError.decodingError("""
+                        Key not found: '\(key.stringValue)'.
+                        """)
+
+                case let .dataCorrupted(context):
+                    throw ManifestError.decodingError("""
+                        Data corrupted: '\(context.debugDescription)'.
+                        """)
+
+                @unknown default:
+                    throw ManifestError.decodingError("\(error)")
+            }
+        } catch {
+            throw ManifestError.decodingError("\(error)")
+        }
 
         Self.fixPlatforms(manifest: &manifest)
-
         return manifest
     }
 
