@@ -17,11 +17,7 @@ struct CodeGenerator: CommandPlugin {
 
         let validator = try context.tool(named: "validate-spi-manifest")
         let process = Process()
-        if #available(macOS 13.0, *) {
-            process.executableURL = URL(filePath: validator.path.string)
-        } else {
-            process.executableURL = URL(fileURLWithPath: validator.path.string)
-        }
+        process.executableURL = URL(fileURLWithPath: validator.path.string)
         process.arguments = [manifestPath.string]
 
         try process.run()
