@@ -1,4 +1,4 @@
-// swift-tools-version: 5.5
+// swift-tools-version: 5.7
 
 // Copyright 2020-2021 Dave Verwer, Sven A. Schmidt, and other contributors.
 //
@@ -20,14 +20,21 @@ let package = Package(
     name: "SPIManifest",
     platforms: [.macOS(.v10_15)],
     products: [
-        .executable(name: "spi-manifest-validate", targets: ["Validator"]),
+        .executable(name: "validate-spi-manifest", targets: ["validate-spi-manifest"]),
         .library(name: "SPIManifest", targets: ["SPIManifest"]),
+        .plugin(name: "SPIManifestValidatorPlugin", targets: ["ValidatorPlugin"])
     ],
     dependencies: [
         .package(url: "https://github.com/jpsim/Yams.git", "4.0.0"..<"6.0.0"),
     ],
     targets: [
-        .executableTarget(name: "Validator", dependencies: ["SPIManifest"]),
+        .executableTarget(name: "validate-spi-manifest", dependencies: ["SPIManifest"]),
+        .plugin(
+            name: "ValidatorPlugin",
+            capability: .command(intent: .custom(verb: "validate-spi-manifest",
+                                                 description: "Validate a .spi.yml file")),
+            dependencies: ["validate-spi-manifest"]
+        ),
         .target(name: "SPIManifest", dependencies: ["Yams"]),
         .testTarget(name: "SPIManifestTests", dependencies: ["SPIManifest"]),
     ]
