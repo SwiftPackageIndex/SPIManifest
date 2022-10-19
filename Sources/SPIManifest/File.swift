@@ -25,7 +25,7 @@ extension ManifestError: CustomStringConvertible {
     public var description: String {
         switch self {
             case .fileTooLarge(size: let size):
-                return "fileTooLarge"
+                return "File is too large: \(size) bytes"
             case let .decodingError(message):
                 return "The file could not be decoded: \(message)"
             case let .invalidPath(path: path):
