@@ -16,10 +16,16 @@ import Foundation
 
 import Yams
 
-
+/// A model representing the manifest configurations
 public struct Manifest: Codable, Equatable {
+    
+    /// The version of the manifest
     public var version: Int = 1
+    
+    /// Object that holds the build configurations
     public var builder: Builder?
+    
+    // Currently unused
     public var externalLinks: ExternalLinks?
 
     enum CodingKeys: String, CodingKey {
