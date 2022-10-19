@@ -1,17 +1,22 @@
 # ``SPIManifest``
 
-Decode the Swift Package Index Manifest files.
+Control how the Swift Package Index indexes your package.
 
 ## Overview
 
-SPIManifest is a Swift package to decode Swift Package Index Manifest files, `.spi.yml`, which Swift package authors can add to their repositories in order to control package processing by the Swift Package Index.
+SPIManifest is a Swift package to decode the Swift Package Index Manifest file `.spi.yml` which Swift package authors can add to their repository.
+
+This allows authors a level of control over package processing by the Swift Package Index.
+
+Here are some examples of things that can be configured by this file:
+
+- <doc:CommonUseCases#Host-DocC-documentation-in-the-Swift-Package-Index>
+- <doc:CommonUseCases#Configure-a-documentation-URL-for-existing-documentation>
+- <doc:CommonUseCases#Control-Targets-and-Schemes>
 
 ## Topics
 
 ### Essentials
 
+- <doc:CommonUseCases>
 - ``Manifest``
-- <doc:Common-Use-Cases>
-
-### Build Types
-
