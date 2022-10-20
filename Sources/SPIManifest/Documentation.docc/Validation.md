@@ -42,6 +42,8 @@ Build complete! (0.10s)
 
 > Note: Make sure you run the command with Swift 5.7 or later. Your tools-version in the package manifest does *not* need to be set to 5.7 or higher.
 
+You can remove or comment out the plugin dependency after using it. It only needs to be present to enable the `package plugin validate-spi-manifest` command.
+
 
 ### Validation Executable
 
