@@ -61,7 +61,6 @@ builder:
   configs:
   - platform: watchos
     scheme: ComposableArchitecture_watchOS
-
 ```
 
 There is also a `target:` key in order to configure a specific target instead of a scheme, where applicable.
