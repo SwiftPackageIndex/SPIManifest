@@ -121,12 +121,12 @@ extension Manifest {
             switch error {
                 case let .typeMismatch(_, context):
                     throw ManifestError.decodingError("""
-                        Error at path '\(context.codingPath.map(\.stringValue).joined(separator: "."))': \(context.debugDescription).
+                        Error at path '\(context.codingPath.map(\.stringValue).joined(separator: "."))': \(context.debugDescription)
                         """)
 
                 case let .valueNotFound(_, context):
                     throw ManifestError.decodingError("""
-                        Error at path '\(context.codingPath.map(\.stringValue).joined(separator: "."))': \(context.debugDescription).
+                        Error at path '\(context.codingPath.map(\.stringValue).joined(separator: "."))': \(context.debugDescription)
                         """)
 
                 case let .keyNotFound(key, _):
@@ -136,7 +136,7 @@ extension Manifest {
 
                 case let .dataCorrupted(context):
                     throw ManifestError.decodingError("""
-                        Data corrupted: '\(context.debugDescription)'.
+                        Data corrupted: '\(context.debugDescription)'
                         """)
 
                 @unknown default:
