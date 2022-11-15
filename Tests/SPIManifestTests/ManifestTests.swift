@@ -25,14 +25,14 @@ class ManifestTests: XCTestCase {
     }
 
     func test_encode_manifest() throws {
-        let m = Manifest(metadata: .init(authors: "Christian Noon, Jon Shier and other contributors"), builder: .init(configs: [
+        let m = Manifest(metadata: .init(authors: "Author One and Author Two"), builder: .init(configs: [
             .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
         ]))
         let str = try YAMLEncoder().encode(m)
         XCTAssertEqual(str, """
             version: 1
             metadata:
-              authors: Christian Noon, Jon Shier and other contributors
+              authors: Author One and Author Two
             builder:
               configs:
               - platform: watchos
@@ -48,7 +48,7 @@ class ManifestTests: XCTestCase {
                 """
                 version: 1
                 metadata:
-                  authors: Christian Noon, Jon Shier and other contributors
+                  authors: Author One and Author Two
                 builder:
                   configs:
                   - platform: watchos
@@ -62,36 +62,7 @@ class ManifestTests: XCTestCase {
 
         // validation
         XCTAssertEqual(m,
-                       Manifest(metadata: .init(authors: "Christian Noon, Jon Shier and other contributors"),
-                                builder: .init(configs: [
-                        .init(platform: Platform.watchos.rawValue,
-                              scheme: "Alamofire watchOS")
-                       ]))
-        )
-    }
-
-    func test_load_without_authors() throws {
-        Current.fileManager.fileExists = { _ in true }
-        Current.fileManager.contents = { _ in
-            Data(
-                """
-                version: 1
-                metadata:
-                  authors:
-                builder:
-                  configs:
-                  - platform: watchos
-                    scheme: Alamofire watchOS
-                """.utf8
-            )
-        }
-
-        // MUT
-        let m = Manifest.load()
-
-        // validation
-        XCTAssertEqual(m,
-                       Manifest(metadata: .init(authors: nil),
+                       Manifest(metadata: .init(authors: "Author One and Author Two"),
                                 builder: .init(configs: [
                         .init(platform: Platform.watchos.rawValue,
                               scheme: "Alamofire watchOS")
@@ -102,21 +73,19 @@ class ManifestTests: XCTestCase {
     func test_load_maxSize() throws {
         let data = Data("""
                 version: 1
-                metadata:
-                  authors: Christian Noon, Jon Shier and other contributors
                 builder:
                   configs:
                   - platform: macosSpm
                     swift_version: 5.6
                     scheme: Some scheme
                 """.utf8)
-        XCTAssertEqual(data.count, 170)
+        XCTAssertEqual(data.count, 100)
         Current.fileManager.fileExists = { _ in true }
         Current.fileManager.contents = { _ in data }
 
         // MUT
-        XCTAssertNotNil(Manifest.load(maxByteSize: 170))
-        XCTAssertNotNil(Manifest.load(maxByteSize: 171))
+        XCTAssertNotNil(Manifest.load(maxByteSize: 100))
+        XCTAssertNotNil(Manifest.load(maxByteSize: 101))
     }
 
     func test_manifests() throws {
