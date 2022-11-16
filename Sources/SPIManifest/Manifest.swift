@@ -21,6 +21,9 @@ public struct Manifest: Codable, Equatable {
     
     /// The version of the manifest
     public var version: Int = 1
+
+    /// Metadata associated with the package, e.g. authors
+    public var metadata: Metadata?
     
     /// Object that holds the build configurations
     public var builder: Builder?
@@ -30,8 +33,13 @@ public struct Manifest: Codable, Equatable {
 
     enum CodingKeys: String, CodingKey {
         case version
+        case metadata
         case builder
         case externalLinks = "external_links"
+    }
+
+    public struct Metadata: Codable, Equatable {
+        public var authors: String?
     }
 
     public struct Builder: Codable, Equatable {
@@ -78,9 +86,11 @@ public struct Manifest: Codable, Equatable {
     }
 
     public init(version: Int = 1,
+                metadata: Manifest.Metadata? = nil,
                 builder: Manifest.Builder? = nil,
                 externalLinks: Manifest.ExternalLinks? = nil) {
         self.version = version
+        self.metadata = metadata
         self.builder = builder
         self.externalLinks = externalLinks
     }

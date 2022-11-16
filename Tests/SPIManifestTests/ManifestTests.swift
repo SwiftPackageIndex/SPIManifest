@@ -25,12 +25,17 @@ class ManifestTests: XCTestCase {
     }
 
     func test_encode_manifest() throws {
-        let m = Manifest(builder: .init(configs: [
-            .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
-        ]))
+        let m = Manifest(metadata: .init(authors: "Author One and Author Two"),
+                         builder: .init(configs: [
+                            .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
+                         ])
+        )
+
         let str = try YAMLEncoder().encode(m)
         XCTAssertEqual(str, """
             version: 1
+            metadata:
+              authors: Author One and Author Two
             builder:
               configs:
               - platform: watchos
@@ -45,6 +50,8 @@ class ManifestTests: XCTestCase {
             Data(
                 """
                 version: 1
+                metadata:
+                  authors: Author One and Author Two
                 builder:
                   configs:
                   - platform: watchos
@@ -58,7 +65,8 @@ class ManifestTests: XCTestCase {
 
         // validation
         XCTAssertEqual(m,
-                       Manifest(builder: .init(configs: [
+                       Manifest(metadata: .init(authors: "Author One and Author Two"),
+                                builder: .init(configs: [
                         .init(platform: Platform.watchos.rawValue,
                               scheme: "Alamofire watchOS")
                        ]))
