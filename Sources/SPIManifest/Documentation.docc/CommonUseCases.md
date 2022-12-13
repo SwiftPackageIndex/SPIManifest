@@ -18,6 +18,8 @@ builder:
 
 This will generate documentation on the default platform, which is macOS.
 
+Targets will appear in the order listed in the selector dropdown in the documentation header. In particular, the first target will be the "landing page target". That means it will be the documentation module shown when the URL does not link to a specific target.
+
 > Note: Adding a `.spi.yml` or making changes to an exiting one may take up to 24 hours for your default branch, because we collate revisions on it. Releases are processed as soon as possible, however.
 
 If your package is not compatible with macOS, you can specify which platform to generate documentation on:
