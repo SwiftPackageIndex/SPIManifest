@@ -1,4 +1,4 @@
-// Copyright 2020-2022 Dave Verwer, Sven A. Schmidt, and other contributors.
+// Copyright Dave Verwer, Sven A. Schmidt, and other contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,16 +18,16 @@ import Yams
 
 /// A model representing the manifest configurations
 public struct Manifest: Codable, Equatable {
-    
+
     /// The version of the manifest
     public var version: Int = 1
 
     /// Metadata associated with the package, e.g. authors
     public var metadata: Metadata?
-    
+
     /// Object that holds the build configurations
     public var builder: Builder?
-    
+
     // Currently unused
     public var externalLinks: ExternalLinks?
 
