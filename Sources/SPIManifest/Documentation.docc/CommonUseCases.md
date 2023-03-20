@@ -22,6 +22,8 @@ Targets will appear in the order listed in the selector dropdown in the document
 
 > Note: Adding a `.spi.yml` or making changes to an exiting one may take up to 24 hours for your default branch, because we collate revisions on it. Releases are processed as soon as possible, however.
 
+> Note: Your package manifest `Package.swift` does *not* need to include the DocC plugin in order for us to host your DocC documentation. We will automatically inject it when building your documentation if we don't detect the plugin in your manifest.
+
 If your package is not compatible with macOS, you can specify which platform to generate documentation on:
 
 ```yaml
@@ -32,7 +34,7 @@ builder:
       platform: ios
 ```
 
-> Note: We currently only support generating documentation on macOS and iOS
+> Note: We currently only support generating documentation on macOS, iOS, and Linux.
 
 
 ## Configure a documentation URL for existing documentation
