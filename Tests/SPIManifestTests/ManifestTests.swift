@@ -488,7 +488,10 @@ class ManifestTests: XCTestCase {
             """
         )
 
-        XCTAssertEqual(m.config()?.generateDocumentationParameters, ["--foo", "bar"])
+        XCTAssertEqual(
+            m.generateDocumentationParameters(platform: .macosSpm, swiftVersion: .latest),
+            ["--foo", "bar"]
+        )
     }
 
 }
