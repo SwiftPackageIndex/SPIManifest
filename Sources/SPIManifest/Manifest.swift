@@ -28,7 +28,7 @@ public struct Manifest: Codable, Equatable {
     /// Object that holds the build configurations
     public var builder: Builder?
 
-    // Currently unused
+    /// Links to pages external to SwiftPackageIndex.com
     public var externalLinks: ExternalLinks?
 
     enum CodingKeys: String, CodingKey {
@@ -51,7 +51,12 @@ public struct Manifest: Codable, Equatable {
             public var image: String?
             public var scheme: String?
             public var target: String?
+
+            /// Define a list of targets for which documentation should be generated. The target order determines their display order and the first target is the one displayed if no target is explicitly selected by the user.
             public var documentationTargets: [String]?
+
+            /// Define custom parameters that will be appended to the `package generate-documentation` invocation during the documentation generation process.
+            public var generateDocumentationParameters: [String]?
 
             enum CodingKeys: String, CodingKey {
                 case platform
@@ -60,6 +65,7 @@ public struct Manifest: Codable, Equatable {
                 case scheme
                 case target
                 case documentationTargets = "documentation_targets"
+                case generateDocumentationParameters = "generate_documentation_parameters"
             }
 
             public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTargets: [String]? = nil) {

@@ -476,4 +476,19 @@ class ManifestTests: XCTestCase {
         )
     }
 
+    func test_generateDocumentationParameters() throws {
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets: [t0]
+                generate_documentation_parameters:
+                - --foo
+                - bar
+            """
+        )
+
+        XCTAssertEqual(m.config()?.generateDocumentationParameters, ["--foo", "bar"])
+    }
+
 }
