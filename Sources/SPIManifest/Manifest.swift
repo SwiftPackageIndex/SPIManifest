@@ -56,7 +56,7 @@ public struct Manifest: Codable, Equatable {
             public var documentationTargets: [String]?
 
             /// Define custom parameters that will be appended to the `package generate-documentation` invocation during the documentation generation process.
-            public var generateDocumentationParameters: [String]?
+            public var customDocumentationParameters: [String]?
 
             enum CodingKeys: String, CodingKey {
                 case platform
@@ -65,7 +65,7 @@ public struct Manifest: Codable, Equatable {
                 case scheme
                 case target
                 case documentationTargets = "documentation_targets"
-                case generateDocumentationParameters = "generate_documentation_parameters"
+                case customDocumentationParameters = "custom_documentation_parameters"
             }
 
             public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTargets: [String]? = nil) {
@@ -254,8 +254,8 @@ extension Manifest {
         self[platform, swiftVersion, \.documentationTargets]?.flatMap { $0 }
     }
 
-    public func generateDocumentationParameters(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
-        self[platform, swiftVersion, \.generateDocumentationParameters]?.flatMap { $0 }
+    public func customDocumentationParameters(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
+        self[platform, swiftVersion, \.customDocumentationParameters]?.flatMap { $0 }
     }
 
     public func scheme(for platform: Platform) -> String? {
