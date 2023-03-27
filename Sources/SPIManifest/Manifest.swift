@@ -102,7 +102,9 @@ public struct Manifest: Codable, Equatable {
     }
 
     public init(yml: String) throws {
-        self = try YAMLDecoder().decode(from: yml)
+        var manifest = try YAMLDecoder().decode(Self.self, from: yml)
+        Self.fixPlatforms(manifest: &manifest)
+        self = manifest
     }
 }
 
@@ -132,7 +134,7 @@ extension Manifest {
 
         var manifest: Self
         do {
-            manifest = try YAMLDecoder().decode(Self.self, from: data)
+            manifest = try .init(yml: String(decoding: data, as: UTF8.self))
         } catch let error as DecodingError {
             switch error {
                 case let .typeMismatch(_, context):
