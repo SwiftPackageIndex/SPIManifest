@@ -28,7 +28,7 @@ public struct Manifest: Codable, Equatable {
     /// Object that holds the build configurations
     public var builder: Builder?
 
-    // Currently unused
+    /// Links to pages external to SwiftPackageIndex.com
     public var externalLinks: ExternalLinks?
 
     enum CodingKeys: String, CodingKey {
@@ -51,7 +51,12 @@ public struct Manifest: Codable, Equatable {
             public var image: String?
             public var scheme: String?
             public var target: String?
+
+            /// Define a list of targets for which documentation should be generated. The target order determines their display order and the first target is the one displayed if no target is explicitly selected by the user.
             public var documentationTargets: [String]?
+
+            /// Define custom parameters that will be appended to the `package generate-documentation` invocation during the documentation generation process.
+            public var customDocumentationParameters: [String]?
 
             enum CodingKeys: String, CodingKey {
                 case platform
@@ -60,6 +65,7 @@ public struct Manifest: Codable, Equatable {
                 case scheme
                 case target
                 case documentationTargets = "documentation_targets"
+                case customDocumentationParameters = "custom_documentation_parameters"
             }
 
             public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTargets: [String]? = nil) {
@@ -96,7 +102,9 @@ public struct Manifest: Codable, Equatable {
     }
 
     public init(yml: String) throws {
-        self = try YAMLDecoder().decode(from: yml)
+        var manifest = try YAMLDecoder().decode(Self.self, from: yml)
+        Self.fixPlatforms(manifest: &manifest)
+        self = manifest
     }
 }
 
@@ -126,7 +134,7 @@ extension Manifest {
 
         var manifest: Self
         do {
-            manifest = try YAMLDecoder().decode(Self.self, from: data)
+            manifest = try .init(yml: String(decoding: data, as: UTF8.self))
         } catch let error as DecodingError {
             switch error {
                 case let .typeMismatch(_, context):
@@ -216,35 +224,41 @@ extension Manifest {
         }.uniqued()
     }
 
-    public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
+    public subscript<Value>(_ platform: Platform, _ swiftVersion: SwiftVersion, _ keypath: KeyPath<Builder.BuildConfig, Value?>) -> Value? {
         // Return an exact match if there is one
-        if let targets = config(platform: .specific(platform),
-                               swiftVersion: .specific(swiftVersion))?.documentationTargets {
-            return targets
+        if let value = config(platform: .specific(platform),
+                              swiftVersion: .specific(swiftVersion))?[keyPath: keypath] {
+            return value
         }
 
         // Next, if the Swift version is the latest, try to find a platform match without a fixed Swift version
         if swiftVersion == .latest,
-           let targets =  config(platform: .specific(platform),
-                                 swiftVersion: .none)?.documentationTargets {
-            return targets
+           let value =  config(platform: .specific(platform), swiftVersion: .none)?[keyPath: keypath] {
+            return value
         }
 
         // Next, if the platform is the preferred docc platform (macosSpm), try to find a Swift version match without a fixed platform
         if platform == .macosSpm,
-           let targets =  config(platform: .none,
-                                 swiftVersion: .specific(swiftVersion))?.documentationTargets {
-            return targets
+           let value =  config(platform: .none, swiftVersion: .specific(swiftVersion))?[keyPath: keypath] {
+            return value
         }
 
         // Finally, if the platform is the preferred docc platform (macosSpm) and the Swift version is the latest, try to find a config match without any platform or Swift version
         if platform == .macosSpm,
            swiftVersion == .latest,
-           let targets = config(platform: .none, swiftVersion: .none)?.documentationTargets {
-            return targets
+           let value = config(platform: .none, swiftVersion: .none)?[keyPath: keypath] {
+            return value
         }
 
         return nil
+    }
+
+    public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
+        self[platform, swiftVersion, \.documentationTargets]?.compactMap { $0 }
+    }
+
+    public func customDocumentationParameters(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
+        self[platform, swiftVersion, \.customDocumentationParameters]?.compactMap { $0 }
     }
 
     public func scheme(for platform: Platform) -> String? {
