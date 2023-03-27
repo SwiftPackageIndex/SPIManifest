@@ -224,40 +224,41 @@ extension Manifest {
         }.uniqued()
     }
 
-    public subscript<Value>(_ platform: Platform, _ swiftVersion: SwiftVersion, _ keypath: KeyPath<Builder.BuildConfig, Value>) -> Value? {
+    public subscript<Value>(_ platform: Platform, _ swiftVersion: SwiftVersion, _ keypath: KeyPath<Builder.BuildConfig, Value?>) -> Value? {
         // Return an exact match if there is one
-        if let config = config(platform: .specific(platform), swiftVersion: .specific(swiftVersion)) {
-            return config[keyPath: keypath]
+        if let value = config(platform: .specific(platform),
+                              swiftVersion: .specific(swiftVersion))?[keyPath: keypath] {
+            return value
         }
 
         // Next, if the Swift version is the latest, try to find a platform match without a fixed Swift version
         if swiftVersion == .latest,
-           let config =  config(platform: .specific(platform), swiftVersion: .none) {
-            return config[keyPath: keypath]
+           let value =  config(platform: .specific(platform), swiftVersion: .none)?[keyPath: keypath] {
+            return value
         }
 
         // Next, if the platform is the preferred docc platform (macosSpm), try to find a Swift version match without a fixed platform
         if platform == .macosSpm,
-           let config =  config(platform: .none, swiftVersion: .specific(swiftVersion)) {
-            return config[keyPath: keypath]
+           let value =  config(platform: .none, swiftVersion: .specific(swiftVersion))?[keyPath: keypath] {
+            return value
         }
 
         // Finally, if the platform is the preferred docc platform (macosSpm) and the Swift version is the latest, try to find a config match without any platform or Swift version
         if platform == .macosSpm,
            swiftVersion == .latest,
-           let config = config(platform: .none, swiftVersion: .none) {
-            return config[keyPath: keypath]
+           let value = config(platform: .none, swiftVersion: .none)?[keyPath: keypath] {
+            return value
         }
 
         return nil
     }
 
     public func documentationTargets(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
-        self[platform, swiftVersion, \.documentationTargets]?.flatMap { $0 }
+        self[platform, swiftVersion, \.documentationTargets]?.compactMap { $0 }
     }
 
     public func customDocumentationParameters(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
-        self[platform, swiftVersion, \.customDocumentationParameters]?.flatMap { $0 }
+        self[platform, swiftVersion, \.customDocumentationParameters]?.compactMap { $0 }
     }
 
     public func scheme(for platform: Platform) -> String? {
