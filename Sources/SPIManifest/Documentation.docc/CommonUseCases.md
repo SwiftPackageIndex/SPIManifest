@@ -74,29 +74,33 @@ There is also a `target:` key in order to configure a specific target instead of
 
 Package authors can also use the `.spi.yml` file to configure custom docker base images for our Linux builds.
 
-We build packages for Linux with docker commands using the official Swift docker images:
+We build packages for Linux with docker commands using our own images based on the official Swift docker images:
 
 ```bash
-docker run --rm -v "$PWD":/host -w /host swift:5.7 swift build
+docker run --rm -v "$PWD":/host -w /host registry.gitlab.com/finestructure/spi-images:basic-5.8-latest swift build
 ```
 
-Some packages however have additional operating system level dependencies that the official Swift images do not provide.
+Our default image comes with a few dependencies pre-installed which you can review via its [`Dockerfile`](https://gitlab.com/finestructure/spi-images/-/blob/main/Dockerfile).
 
-If this is the case for your package, you can use our [images derived from the official Swift docker images](https://gitlab.com/finestructure/spi-images/-/blob/main/Dockerfile), which include some common Linux packages.
+There might also be other, more specialised `Dockerfiles` that match your dependencies, for example [`Dockerfile.AppKid`](https://gitlab.com/finestructure/spi-images/-/blob/main/Dockerfile.AppKid). It may be worth reviewing the `Dockerfile`s in the [`spi-images` repository for matches](https://gitlab.com/finestructure/spi-images/-/tree/main).
 
-Here's an example:
+As mentioned above, we are referencing the basic image by default, so if `Dockerfile` matches your requirements you do not need to add an `image:` clause to your `.spi.yml` file at all.
+
+If you would like to reference a specialized `Dockerfile`, like for instance `Dockerfile.AppKid`, use the following `image:` clause:
 
 ```yaml
 version: 1
 builder:
   configs:
   - platform: linux
-    swift_version: '5.5'
-    image: registry.gitlab.com/finestructure/spi-images:basic-5.5-latest
-  - platform: linux
-    swift_version: '5.6'
-    image: registry.gitlab.com/finestructure/spi-images:basic-5.6-latest
+    swift_version: '5.8'
+    image: registry.gitlab.com/finestructure/spi-images:AppKid-5.8-latest
 ```
 
-If your requirements are not included, please [open an issue](https://github.com/SwiftPackageIndex/SwiftPackageIndex-Server/issues/new/choose).
+Effectively, the image name is based on the `Dockerfile` suffix:
 
+```
+registry.gitlab.com/finestructure/spi-images:${SUFFIX}-5.8-latest
+```
+
+If your package requires additional dependencies not covered by any of the existing images, please [open an issue](https://github.com/SwiftPackageIndex/SwiftPackageIndex-Server/issues/new/choose) so that we can either add them to the basic image if they are of a general nature or create a new specialized image.
