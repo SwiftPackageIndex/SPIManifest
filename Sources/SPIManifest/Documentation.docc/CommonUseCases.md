@@ -49,6 +49,21 @@ external_links:
   documentation: "https://example.com/docs"
 ```
 
+## Provide custom documentation generation parameters
+
+DocC documentation generation can be configured via command line arguments to opt into certain features for instance. Package authors can provide these flags via the `custom_documentation_parameters` key in their `.spi.yml` file:
+
+```yml
+version: 1
+builder:
+    configs:
+    - documentation_targets: [Target]
+      custom_documentation_parameters: [--include-extended-types]
+```
+
+The provided flags will be added to the `swift package generate-documentation` call when generating documentation via SPM (default).
+
+When choosing to generate documentation on iOS, the flags will passed to `xcodebuild docbuild` via the `OTHER_DOCC_FLAGS` environment variable.
 
 ## Control Targets and Schemes
 
