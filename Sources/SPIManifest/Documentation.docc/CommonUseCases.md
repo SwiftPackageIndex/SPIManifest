@@ -20,7 +20,7 @@ This will generate documentation on the default platform, which is macOS.
 
 Targets will appear in the order listed in the selector dropdown in the documentation header. In particular, the first target will be the "landing page target". That means it will be the documentation module shown when the URL does not link to a specific target.
 
-> Note: Adding a `.spi.yml` or making changes to an exiting one may take up to 24 hours for your default branch, because we collate revisions on it. Releases are processed as soon as possible, however.
+> Note: Adding a `.spi.yml` or making changes to an existing one may take up to 24 hours for your default branch, because we collate revisions on it. Releases are processed as soon as possible, however.
 
 > Note: Your package manifest `Package.swift` does *not* need to include the DocC plugin in order for us to host your DocC documentation. We will automatically inject it when building your documentation if we don't detect the plugin in your manifest.
 
