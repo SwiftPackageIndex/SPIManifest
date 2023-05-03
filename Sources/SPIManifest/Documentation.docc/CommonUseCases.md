@@ -7,7 +7,7 @@ The following are some common use cases.
 
 ## Host DocC documentation in the Swift Package Index
 
-Package authors can configure their package's documentation to be hosted on the Swift Package Index. In order to do so, add a `.spi.yml` file with the following content to the root of your package repository listing on or multiple targets you want to generate documentation for:
+Package authors can configure their package's documentation to be hosted on the Swift Package Index. In order to do so, add a `.spi.yml` file with the following content to the root of your package repository listing one or more targets you want to generate documentation for:
 
 ```yaml
 version: 1
@@ -20,7 +20,7 @@ This will generate documentation on the default platform, which is macOS.
 
 Targets will appear in the order listed in the selector dropdown in the documentation header. In particular, the first target will be the "landing page target". That means it will be the documentation module shown when the URL does not link to a specific target.
 
-> Note: Adding a `.spi.yml` or making changes to an exiting one may take up to 24 hours for your default branch, because we collate revisions on it. Releases are processed as soon as possible, however.
+> Note: Adding a `.spi.yml` or making changes to an existing one may take up to 24 hours for your default branch, because we collate revisions on it. Releases are processed as soon as possible, however.
 
 > Note: Your package manifest `Package.swift` does *not* need to include the DocC plugin in order for us to host your DocC documentation. We will automatically inject it when building your documentation if we don't detect the plugin in your manifest.
 
