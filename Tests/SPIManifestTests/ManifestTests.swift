@@ -191,7 +191,7 @@ class ManifestTests: XCTestCase {
 
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
-                if p == .macosSpm && s == .latest {
+                if p == .macosSpm && s == .latestRelease {
                     XCTAssertEqual(
                         m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                         "failed for (\(p), \(s))"
@@ -219,7 +219,7 @@ class ManifestTests: XCTestCase {
 
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
-                if p == .ios && s == .latest {
+                if p == .ios && s == .latestRelease {
                     XCTAssertEqual(
                         m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                         "failed for (\(p), \(s))"
@@ -278,7 +278,7 @@ class ManifestTests: XCTestCase {
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
                 switch (p, s) {
-                    case (.ios, .latest), (.macosSpm, .v5_6):
+                    case (.ios, .latestRelease), (.macosSpm, .v5_6):
                         XCTAssertEqual(
                             m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                             "failed for (\(p), \(s))"
@@ -318,7 +318,8 @@ class ManifestTests: XCTestCase {
         // MUT
         XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_7), ["t3"])
         XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_6), nil)
-        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_9), ["t0"])
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_8), ["t0"])
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_9), nil)
     }
 
     func test_allDocumentationTargets() throws {
@@ -489,7 +490,7 @@ class ManifestTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            m.customDocumentationParameters(platform: .macosSpm, swiftVersion: .latest),
+            m.customDocumentationParameters(platform: .macosSpm, swiftVersion: .latestRelease),
             ["--foo", "bar"]
         )
     }

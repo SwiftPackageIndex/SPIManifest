@@ -232,7 +232,7 @@ extension Manifest {
         }
 
         // Next, if the Swift version is the latest, try to find a platform match without a fixed Swift version
-        if swiftVersion == .latest,
+        if swiftVersion == .latestRelease,
            let value =  config(platform: .specific(platform), swiftVersion: .none)?[keyPath: keypath] {
             return value
         }
@@ -245,7 +245,7 @@ extension Manifest {
 
         // Finally, if the platform is the preferred docc platform (macosSpm) and the Swift version is the latest, try to find a config match without any platform or Swift version
         if platform == .macosSpm,
-           swiftVersion == .latest,
+           swiftVersion == .latestRelease,
            let value = config(platform: .none, swiftVersion: .none)?[keyPath: keypath] {
             return value
         }
