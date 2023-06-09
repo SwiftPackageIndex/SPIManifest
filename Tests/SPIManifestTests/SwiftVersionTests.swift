@@ -18,9 +18,10 @@ import XCTest
 
 class SwiftVersionTests: XCTestCase {
 
-    func test_isLatest() throws {
-        XCTAssertEqual(SwiftVersion.v5_7.isLatest, false)
-        XCTAssertEqual(SwiftVersion.v5_9.isLatest, true)
+    func test_isLatestRelease() throws {
+        XCTAssertEqual(SwiftVersion.v5_7.isLatestRelease, false)
+        XCTAssertEqual(SwiftVersion.v5_8.isLatestRelease, true)
+        XCTAssertEqual(SwiftVersion.v5_9.isLatestRelease, false)
     }
 
 }

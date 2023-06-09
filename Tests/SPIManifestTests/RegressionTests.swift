@@ -31,7 +31,7 @@ final class RegressionTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            m.documentationTargets(platform: .macosSpm, swiftVersion: .latest),
+            m.documentationTargets(platform: .macosSpm, swiftVersion: .latestRelease),
             ["ChimeExtensionInterface", "ChimeLSPAdapter"]
         )
     }
