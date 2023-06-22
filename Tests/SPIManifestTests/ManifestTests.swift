@@ -27,7 +27,7 @@ class ManifestTests: XCTestCase {
     func test_encode_manifest() throws {
         let m = Manifest(metadata: .init(authors: "Author One and Author Two"),
                          builder: .init(configs: [
-                            .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
+                            .init(platform: Platform.watchOS.rawValue, scheme: "Alamofire watchOS")
                          ])
         )
 
@@ -67,7 +67,7 @@ class ManifestTests: XCTestCase {
         XCTAssertEqual(m,
                        Manifest(metadata: .init(authors: "Author One and Author Two"),
                                 builder: .init(configs: [
-                        .init(platform: Platform.watchos.rawValue,
+                        .init(platform: Platform.watchOS.rawValue,
                               scheme: "Alamofire watchOS")
                        ]))
         )
@@ -117,12 +117,12 @@ class ManifestTests: XCTestCase {
         // Test `config` selector
         do {  // match
             let m = Manifest(builder: .init(configs: [
-                .init(platform: Platform.ios.rawValue,
+                .init(platform: Platform.iOS.rawValue,
                       swiftVersion: "5.6")
             ]))
 
             // MUT
-            XCTAssertNotNil(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6)))
+            XCTAssertNotNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6)))
         }
 
         do {  // no matching platform
@@ -131,27 +131,27 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertNil(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6)))
+            XCTAssertNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6)))
         }
 
         do {  // no matching version
             let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.linux.rawValue),
-                .init(platform: Platform.ios.rawValue)
+                .init(platform: Platform.iOS.rawValue)
             ]))
 
             // MUT
-            XCTAssertNil(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6)))
+            XCTAssertNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6)))
         }
 
         do {  // pick specific swift version over nil one
             let m = Manifest(builder: .init(configs: [
-                .init(platform: Platform.ios.rawValue, scheme: "scheme-1"),
-                .init(platform: Platform.ios.rawValue, swiftVersion: "5.6", scheme: "scheme-2")
+                .init(platform: Platform.iOS.rawValue, scheme: "scheme-1"),
+                .init(platform: Platform.iOS.rawValue, swiftVersion: "5.6", scheme: "scheme-2")
             ]))
 
             // MUT
-            XCTAssertEqual(m.config(platform: .specific(.ios), swiftVersion: .specific(.v5_6))?.scheme, "scheme-2")
+            XCTAssertEqual(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6))?.scheme, "scheme-2")
         }
     }
 
@@ -159,20 +159,20 @@ class ManifestTests: XCTestCase {
         // Test `config` selector
         let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.linux.rawValue),
-            .init(platform: Platform.ios.rawValue, swiftVersion: "5.5", scheme: "scheme-1"),
-            .init(platform: Platform.ios.rawValue, scheme: "scheme-2")
+            .init(platform: Platform.iOS.rawValue, swiftVersion: "5.5", scheme: "scheme-1"),
+            .init(platform: Platform.iOS.rawValue, scheme: "scheme-2")
         ]))
 
         // MUT
-        XCTAssertEqual(m.config(platform: .specific(.ios))?.scheme, "scheme-1")
+        XCTAssertEqual(m.config(platform: .specific(.iOS))?.scheme, "scheme-1")
     }
 
     func test_config_swiftVersion() throws {
         // Test `config` selector
         let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.linux.rawValue),
-            .init(platform: Platform.ios.rawValue, swiftVersion: "5.6", scheme: "scheme-1"),
-            .init(platform: Platform.ios.rawValue, scheme: "scheme-2")
+            .init(platform: Platform.iOS.rawValue, swiftVersion: "5.6", scheme: "scheme-1"),
+            .init(platform: Platform.iOS.rawValue, scheme: "scheme-2")
         ]))
 
         // MUT
@@ -219,7 +219,7 @@ class ManifestTests: XCTestCase {
 
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
-                if p == .ios && s == .latestRelease {
+                if p == .iOS && s == .latestRelease {
                     XCTAssertEqual(
                         m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                         "failed for (\(p), \(s))"
@@ -278,7 +278,7 @@ class ManifestTests: XCTestCase {
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
                 switch (p, s) {
-                    case (.ios, .latestRelease), (.macosSpm, .v5_6):
+                    case (.iOS, .latestRelease), (.macosSpm, .v5_6):
                         XCTAssertEqual(
                             m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                             "failed for (\(p), \(s))"
@@ -316,8 +316,8 @@ class ManifestTests: XCTestCase {
         )
 
         // MUT
-        XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_7), ["t3"])
-        XCTAssertEqual(m.documentationTargets(platform: .watchos, swiftVersion: .v5_6), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_7), ["t3"])
+        XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_6), nil)
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_8), ["t0"])
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_9), nil)
     }
@@ -374,12 +374,12 @@ class ManifestTests: XCTestCase {
 
     func test_scheme() throws {
         let m = Manifest(builder: .init(configs: [
-            .init(platform: Platform.watchos.rawValue, scheme: "Alamofire watchOS")
+            .init(platform: Platform.watchOS.rawValue, scheme: "Alamofire watchOS")
         ]))
 
         // MUT
-        XCTAssertNil(m.scheme(for: .ios))
-        XCTAssertEqual(m.scheme(for: .watchos), "Alamofire watchOS")
+        XCTAssertNil(m.scheme(for: .iOS))
+        XCTAssertEqual(m.scheme(for: .watchOS), "Alamofire watchOS")
     }
 
     func test_scheme_all_platforms() throws {
@@ -388,8 +388,8 @@ class ManifestTests: XCTestCase {
         ]))
 
         // MUT
-        XCTAssertEqual(m.scheme(for: .ios), "Custom scheme")
-        XCTAssertEqual(m.scheme(for: .watchos), "Custom scheme")
+        XCTAssertEqual(m.scheme(for: .iOS), "Custom scheme")
+        XCTAssertEqual(m.scheme(for: .watchOS), "Custom scheme")
     }
 
     func test_target() throws {
@@ -398,7 +398,7 @@ class ManifestTests: XCTestCase {
         ]))
 
         // MUT
-        XCTAssertNil(m.target(for: .ios))
+        XCTAssertNil(m.target(for: .iOS))
         XCTAssertEqual(m.target(for: .macosSpm), "foo bar")
     }
 
@@ -433,7 +433,7 @@ class ManifestTests: XCTestCase {
         let m = Manifest.load()
 
         // validate
-        XCTAssertEqual(m?.scheme(for: .ios), "ComposableArchitecture")
+        XCTAssertEqual(m?.scheme(for: .iOS), "ComposableArchitecture")
     }
 
     func test_documentationUrl() throws {

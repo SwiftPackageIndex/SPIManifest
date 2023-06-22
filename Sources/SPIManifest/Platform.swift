@@ -13,10 +13,11 @@
 // limitations under the License.
 
 public enum Platform: String, Codable, CaseIterable {
-    case ios
+    case iOS                = "ios"
+    case linux
     case macosSpm           = "macos-spm"
     case macosXcodebuild    = "macos-xcodebuild"
-    case tvos
-    case watchos
-    case linux
+    case tvOS               = "tvos"
+    case visionOS           = "visionos"
+    case watchOS            = "watchos"
 }
