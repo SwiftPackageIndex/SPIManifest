@@ -15,7 +15,7 @@
 public typealias ShortVersion = String
 
 
-public enum SwiftVersion: ShortVersion, Codable {
+public enum SwiftVersion: ShortVersion, Codable, CaseIterable {
     case v5_6 = "5.6"
     case v5_7 = "5.7"
     case v5_8 = "5.8"
@@ -25,11 +25,18 @@ public enum SwiftVersion: ShortVersion, Codable {
 }
 
 
-extension SwiftVersion: CaseIterable {
+extension SwiftVersion {
     public var isLatestRelease: Bool { self == Self.latestRelease }
 }
 
 
 extension SwiftVersion: CustomStringConvertible {
     public var description: String { rawValue }
+}
+
+
+extension SwiftVersion: Comparable {
+    public static func < (lhs: SwiftVersion, rhs: SwiftVersion) -> Bool {
+        allCases.firstIndex(of: lhs)! < allCases.firstIndex(of: rhs)!
+    }
 }
