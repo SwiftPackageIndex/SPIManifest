@@ -24,4 +24,10 @@ class SwiftVersionTests: XCTestCase {
         XCTAssertEqual(SwiftVersion.v5_9.isLatestRelease, false)
     }
 
+    func test_Comparable() throws {
+        XCTAssert(SwiftVersion.v5_9 > .v5_8)
+        XCTAssert(SwiftVersion.v5_8 > .v5_7)
+        XCTAssert(SwiftVersion.v5_7 > .v5_6)
+    }
+
 }
