@@ -21,7 +21,7 @@ public enum SwiftVersion: ShortVersion, Codable, CaseIterable {
     case v5_8 = "5.8"
     case v5_9 = "5.9"  // currently a pre-release version
 
-    public static var latestRelease: Self { .v5_8 }
+    public static var latestRelease: Self { .v5_9 }
 }
 
 
