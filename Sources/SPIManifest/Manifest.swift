@@ -46,7 +46,7 @@ public struct Manifest: Codable, Equatable {
         public var configs: [BuildConfig]
 
         public struct BuildConfig: Codable, Equatable {
-            public var platform: String?
+            public var platform: Platform?
             public var swiftVersion: ShortVersion?
             public var image: String?
             public var scheme: String?
@@ -69,12 +69,39 @@ public struct Manifest: Codable, Equatable {
             }
 
             public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTargets: [String]? = nil) {
-                self.platform = platform
+                self.platform = platform.flatMap(Platform.init(lenientRawValue:))
                 self.swiftVersion = swiftVersion
                 self.image = image
                 self.scheme = scheme
                 self.target = target
                 self.documentationTargets = documentationTargets
+            }
+            
+            public init(from decoder: Decoder) throws {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                
+                // Decode platform as String to allow for more lenient interpretation
+                self.platform = try container.decodeIfPresent(String.self, forKey: .platform)
+                    .flatMap(Platform.init(lenientRawValue:))
+                self.swiftVersion = try container.decodeIfPresent(ShortVersion.self, forKey: .swiftVersion)
+                self.image = try container.decodeIfPresent(String.self, forKey: .image)
+                self.scheme = try container.decodeIfPresent(String.self, forKey: .scheme)
+                self.target = try container.decodeIfPresent(String.self, forKey: .target)
+                self.documentationTargets = try container.decodeIfPresent([String].self, forKey: .documentationTargets)
+                self.customDocumentationParameters = try container.decodeIfPresent([String].self, forKey: .customDocumentationParameters)
+                
+            }
+            
+            public func encode(to encoder: Encoder) throws {
+                var container = encoder.container(keyedBy: CodingKeys.self)
+                
+                try container.encodeIfPresent(self.platform, forKey: .platform)
+                try container.encodeIfPresent(self.swiftVersion, forKey: .swiftVersion)
+                try container.encodeIfPresent(self.image, forKey: .image)
+                try container.encodeIfPresent(self.scheme, forKey: .scheme)
+                try container.encodeIfPresent(self.target, forKey: .target)
+                try container.encodeIfPresent(self.documentationTargets, forKey: .documentationTargets)
+                try container.encodeIfPresent(self.customDocumentationParameters, forKey: .customDocumentationParameters)
             }
         }
 
@@ -102,9 +129,7 @@ public struct Manifest: Codable, Equatable {
     }
 
     public init(yml: String) throws {
-        var manifest = try YAMLDecoder().decode(Self.self, from: yml)
-        Self.fixPlatforms(manifest: &manifest)
-        self = manifest
+        self = try YAMLDecoder().decode(Self.self, from: yml)
     }
 }
 
@@ -164,7 +189,6 @@ extension Manifest {
             throw ManifestError.decodingError("\(error)")
         }
 
-        Self.fixPlatforms(manifest: &manifest)
         return manifest
     }
 
@@ -184,17 +208,17 @@ extension Manifest {
             case let (.specific(platform), .specific(swiftVersion)):
                 return builder.configs
                     .first {
-                        $0.platform == platform.rawValue
+                        $0.platform == platform
                         && $0.swiftVersion == swiftVersion.rawValue
                     }
 
             case let (.specific(platform), .any):
                 return builder.configs
-                    .first { $0.platform == platform.rawValue }
+                    .first { $0.platform == platform }
 
             case let (.specific(platform), .none):
                 return builder.configs
-                    .first { $0.platform == platform.rawValue && $0.swiftVersion == nil }
+                    .first { $0.platform == platform && $0.swiftVersion == nil }
 
             case let (.any, .specific(swiftVersion)):
                 return builder.configs
@@ -289,22 +313,4 @@ extension Manifest {
             .flatMap(\.target)
     }
 
-}
-
-
-extension Manifest {
-    /// Adjust user provided platform inputs to match valid keys. For instance `macos` (which would need to be `macos-spm` to match `Platform.macosSpm`.
-    /// - Parameter manifest: input `Manifest`
-    private static func fixPlatforms(manifest: inout Manifest) {
-        if let builder = manifest.builder {
-            let configs = builder.configs.map { config -> Builder.BuildConfig in
-                var config = config
-                if config.platform?.lowercased() == "macos" {
-                    config.platform = Platform.macosSpm.rawValue
-                }
-                return config
-            }
-            manifest.builder?.configs = configs
-        }
-    }
 }
