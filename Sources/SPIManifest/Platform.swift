@@ -20,4 +20,33 @@ public enum Platform: String, Codable, CaseIterable {
     case tvOS               = "tvos"
     case visionOS           = "visionos"
     case watchOS            = "watchos"
+
+
+}
+
+
+extension Platform {
+    public init?(lenientRawValue: String) {
+        // Try plain enum rawValue init
+        if let platform = Platform(rawValue: lenientRawValue) {
+            self = platform
+            return
+        }
+
+        // Support upper case variants
+        if let platform = Platform(rawValue: lenientRawValue.lowercased()) {
+            self = platform
+            return
+        }
+
+        // Support alternative spellings for macos, defaulting to macos-spm
+        switch lenientRawValue.lowercased() {
+            case "macos", "macosspm":
+                self = .macosSpm
+            case "macosxcodebuild":
+                self = .macosXcodebuild
+            default:
+                return nil
+        }
+    }
 }

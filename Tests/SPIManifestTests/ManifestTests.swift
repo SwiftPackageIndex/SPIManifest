@@ -20,6 +20,19 @@ import Yams
 
 class ManifestTests: XCTestCase {
 
+    func test_Platform_init_lenientRawValue() throws {
+        XCTAssertEqual(Platform(lenientRawValue: "ios"), .iOS)
+        XCTAssertEqual(Platform(lenientRawValue: "iOS"), .iOS)
+        XCTAssertEqual(Platform(lenientRawValue: "iOs"), .iOS)
+        XCTAssertEqual(Platform(lenientRawValue: "macos"), .macosSpm)
+        XCTAssertEqual(Platform(lenientRawValue: "macosspm"), .macosSpm)
+        XCTAssertEqual(Platform(lenientRawValue: "macos-spm"), .macosSpm)
+        XCTAssertEqual(Platform(lenientRawValue: "macos-SPM"), .macosSpm)
+        XCTAssertEqual(Platform(lenientRawValue: "macosXcodebuild"), .macosXcodebuild)
+        XCTAssertEqual(Platform(lenientRawValue: "macosxcodebuild"), .macosXcodebuild)
+        XCTAssertEqual(Platform(lenientRawValue: "macos-xcodebuild"), .macosXcodebuild)
+    }
+
     func test_empty() throws {
         XCTAssertNoThrow(try Manifest(yml: "version: 1"))
     }
