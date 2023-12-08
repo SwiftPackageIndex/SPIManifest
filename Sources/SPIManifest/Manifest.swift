@@ -144,6 +144,7 @@ extension Manifest {
         return try? load(at: path)
     }
 
+    @discardableResult
     public static func load(at path: String) throws -> Self {
         guard Current.fileManager.fileExists(atPath: path) else {
             throw ManifestError.invalidPath(path: path)

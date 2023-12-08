@@ -6,7 +6,6 @@ import Glibc
 
 import SPIManifest
 
-
 @main
 enum Validator {
     static func main() {
@@ -17,7 +16,7 @@ enum Validator {
         }
 
         do {
-            _ = try SPIManifest.Manifest.load(at: path)
+            try SPIManifest.Manifest.load(at: path)
         } catch {
             print("🔴 \(error)")
             exit(2)
