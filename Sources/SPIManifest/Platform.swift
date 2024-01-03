@@ -20,6 +20,7 @@ public enum Platform: String, Codable, CaseIterable {
     case tvOS               = "tvos"
     case visionOS           = "visionos"
     case watchOS            = "watchos"
+    case wasm
 }
 
 
