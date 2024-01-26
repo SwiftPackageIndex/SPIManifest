@@ -135,7 +135,7 @@ public struct Manifest: Codable, Equatable {
 
 extension Manifest {
     public static let fileName = ".spi.yml"
-    public static let maxByteSize = 1_000
+    public static let maxByteSize = 1_500
 
     public static func load(in directory: String = ".", maxByteSize: Int = Self.maxByteSize) -> Self? {
         let path = directory.hasSuffix("/")
