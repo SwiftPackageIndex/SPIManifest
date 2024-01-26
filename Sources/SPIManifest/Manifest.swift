@@ -154,6 +154,11 @@ extension Manifest {
             throw ManifestError.noData
         }
 
+        return try load(data: data)
+    }
+
+    @discardableResult
+    public static func load(data: Data, maxByteSize: Int = maxByteSize) throws -> Self {
         guard data.count <= maxByteSize else {
             throw ManifestError.fileTooLarge(size: data.count)
         }
