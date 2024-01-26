@@ -135,7 +135,7 @@ public struct Manifest: Codable, Equatable {
 
 extension Manifest {
     public static let fileName = ".spi.yml"
-    public static let maxByteSize = 1_000
+    public static let maxByteSize = 1_500
 
     public static func load(in directory: String = ".", maxByteSize: Int = Self.maxByteSize) -> Self? {
         let path = directory.hasSuffix("/")
@@ -154,6 +154,11 @@ extension Manifest {
             throw ManifestError.noData
         }
 
+        return try load(data: data)
+    }
+
+    @discardableResult
+    public static func load(data: Data, maxByteSize: Int = maxByteSize) throws -> Self {
         guard data.count <= maxByteSize else {
             throw ManifestError.fileTooLarge(size: data.count)
         }
