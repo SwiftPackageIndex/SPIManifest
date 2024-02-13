@@ -131,11 +131,11 @@ class ManifestTests: XCTestCase {
         do {  // match
             let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.iOS.rawValue,
-                      swiftVersion: "5.6")
+                      swiftVersion: "5.9")
             ]))
 
             // MUT
-            XCTAssertNotNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6)))
+            XCTAssertNotNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_9)))
         }
 
         do {  // no matching platform
@@ -144,7 +144,7 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6)))
+            XCTAssertNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_9)))
         }
 
         do {  // no matching version
@@ -154,17 +154,17 @@ class ManifestTests: XCTestCase {
             ]))
 
             // MUT
-            XCTAssertNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6)))
+            XCTAssertNil(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_9)))
         }
 
         do {  // pick specific swift version over nil one
             let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.iOS.rawValue, scheme: "scheme-1"),
-                .init(platform: Platform.iOS.rawValue, swiftVersion: "5.6", scheme: "scheme-2")
+                .init(platform: Platform.iOS.rawValue, swiftVersion: "5.9", scheme: "scheme-2")
             ]))
 
             // MUT
-            XCTAssertEqual(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_6))?.scheme, "scheme-2")
+            XCTAssertEqual(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v5_9))?.scheme, "scheme-2")
         }
     }
 
@@ -184,12 +184,12 @@ class ManifestTests: XCTestCase {
         // Test `config` selector
         let m = Manifest(builder: .init(configs: [
             .init(platform: Platform.linux.rawValue),
-            .init(platform: Platform.iOS.rawValue, swiftVersion: "5.6", scheme: "scheme-1"),
+            .init(platform: Platform.iOS.rawValue, swiftVersion: "5.9", scheme: "scheme-1"),
             .init(platform: Platform.iOS.rawValue, scheme: "scheme-2")
         ]))
 
         // MUT
-        XCTAssertEqual(m.config(swiftVersion: .specific(.v5_6))?.scheme, "scheme-1")
+        XCTAssertEqual(m.config(swiftVersion: .specific(.v5_9))?.scheme, "scheme-1")
     }
 
     func test_documentationTargets_bare_default() throws {
@@ -254,13 +254,13 @@ class ManifestTests: XCTestCase {
             builder:
               configs:
               - documentation_targets: [t0]
-                swift_version: 5.6
+                swift_version: 5.8
             """
         )
 
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
-                if p == .macosSpm && s == .v5_6 {
+                if p == .macosSpm && s == .v5_8 {
                     XCTAssertEqual(
                         m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                         "failed for (\(p), \(s))"
@@ -282,7 +282,7 @@ class ManifestTests: XCTestCase {
             builder:
               configs:
               - documentation_targets: [t0]
-                swift_version: 5.6
+                swift_version: 5.8
               - documentation_targets: [t0]
                 platform: ios
             """
@@ -291,7 +291,7 @@ class ManifestTests: XCTestCase {
         for s in SwiftVersion.allCases {
             for p in Platform.allCases {
                 switch (p, s) {
-                    case (.iOS, .latestRelease), (.macosSpm, .v5_6):
+                    case (.iOS, .latestRelease), (.macosSpm, .v5_8):
                         XCTAssertEqual(
                             m.documentationTargets(platform: p, swiftVersion: s), ["t0"],
                             "failed for (\(p), \(s))"
@@ -330,9 +330,9 @@ class ManifestTests: XCTestCase {
 
         // MUT
         XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_7), ["t3"])
-        XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_6), nil)
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_8), nil)
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_9), ["t0"])
+        XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_10), nil)
     }
 
     func test_allDocumentationTargets() throws {
