@@ -331,8 +331,9 @@ class ManifestTests: XCTestCase {
         // MUT
         XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_7), ["t3"])
         XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_8), nil)
-        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_9), ["t0"])
-        XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_10), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_9), nil)
+        XCTAssertEqual(m.documentationTargets(platform: .macosSpm, swiftVersion: .v5_10), ["t0"])
+        XCTAssertEqual(m.documentationTargets(platform: .watchOS, swiftVersion: .v5_9), nil)
     }
 
     func test_allDocumentationTargets() throws {
