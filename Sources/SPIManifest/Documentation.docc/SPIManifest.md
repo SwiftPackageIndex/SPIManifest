@@ -18,9 +18,9 @@ Here are some examples of things that can be configured by this file:
 
 ### Validation
 
-This package comes with an executable to validate your `.spi.yml` for correctness. See
+Swift Package Index manifests can be validated for correctness via the [Online Validator](https://swiftpackageindex.com/validate-spi-manifest) or via an executable that comes with this package. See
 
-- <doc:Validation>
+- <doc:ManifestValidation>
 
 for more details.
 
@@ -29,5 +29,6 @@ for more details.
 ### Essentials
 
 - <doc:CommonUseCases>
+- <doc:ManifestValidation>
 - <doc:Validation>
 - ``Manifest``

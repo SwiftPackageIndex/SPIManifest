@@ -4,7 +4,6 @@ The contents of a `.spi.yml` file allow package authors to configure their packa
 
 The following are some common use cases.
 
-
 ## Host DocC documentation in the Swift Package Index
 
 Package authors can configure their package's documentation to be hosted on the Swift Package Index. In order to do so, add a `.spi.yml` file with the following content to the root of your package repository listing one or more targets you want to generate documentation for:
