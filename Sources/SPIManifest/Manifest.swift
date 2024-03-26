@@ -49,6 +49,7 @@ public struct Manifest: Codable, Equatable {
             public var platform: Platform?
             public var swiftVersion: ShortVersion?
             public var image: String?
+            public var osDependencies: [String]?
             public var scheme: String?
             public var target: String?
 
@@ -62,16 +63,26 @@ public struct Manifest: Codable, Equatable {
                 case platform
                 case swiftVersion = "swift_version"
                 case image
+                case osDependencies = "os_dependencies"
                 case scheme
                 case target
                 case documentationTargets = "documentation_targets"
                 case customDocumentationParameters = "custom_documentation_parameters"
             }
 
-            public init(platform: String? = nil, swiftVersion: ShortVersion? = nil, image: String? = nil, scheme: String? = nil, target: String? = nil, documentationTargets: [String]? = nil) {
+            public init(
+                platform: String? = nil,
+                swiftVersion: ShortVersion? = nil,
+                image: String? = nil,
+                osDependencies: [String]? = nil,
+                scheme: String? = nil,
+                target: String? = nil,
+                documentationTargets: [String]? = nil
+            ) {
                 self.platform = platform.flatMap(Platform.init(lenientRawValue:))
                 self.swiftVersion = swiftVersion
                 self.image = image
+                self.osDependencies = osDependencies
                 self.scheme = scheme
                 self.target = target
                 self.documentationTargets = documentationTargets
@@ -85,11 +96,11 @@ public struct Manifest: Codable, Equatable {
                     .flatMap(Platform.init(lenientRawValue:))
                 self.swiftVersion = try container.decodeIfPresent(ShortVersion.self, forKey: .swiftVersion)
                 self.image = try container.decodeIfPresent(String.self, forKey: .image)
+                self.osDependencies = try container.decodeIfPresent([String].self, forKey: .osDependencies)
                 self.scheme = try container.decodeIfPresent(String.self, forKey: .scheme)
                 self.target = try container.decodeIfPresent(String.self, forKey: .target)
                 self.documentationTargets = try container.decodeIfPresent([String].self, forKey: .documentationTargets)
                 self.customDocumentationParameters = try container.decodeIfPresent([String].self, forKey: .customDocumentationParameters)
-                
             }
             
             public func encode(to encoder: Encoder) throws {
@@ -292,31 +303,25 @@ extension Manifest {
     }
 
     public func scheme(for platform: Platform) -> String? {
-        guard let builder = builder else { return nil }
-
-        if let specific = config(platform: .specific(platform))
-            .flatMap(\.scheme) {
-            return specific
-        }
-
-        // look for a generic config
-        return builder.configs
-            .first { $0.platform == nil }
-            .flatMap(\.scheme)
+        config(for: platform, \.scheme)
     }
 
     public func target(for platform: Platform) -> String? {
+        config(for: platform, \.target)
+    }
+
+    public func config<T>(for platform: Platform, _ keyPath: KeyPath<Builder.BuildConfig, T?>) -> T? {
         guard let builder = builder else { return nil }
 
         if let specific = config(platform: .specific(platform))
-            .flatMap(\.target) {
+            .flatMap({ $0[keyPath: keyPath] }) {
             return specific
         }
 
         // look for a generic config
         return builder.configs
             .first { $0.platform == nil }
-            .flatMap(\.target)
+            .flatMap { $0[keyPath: keyPath] }
     }
 
 }

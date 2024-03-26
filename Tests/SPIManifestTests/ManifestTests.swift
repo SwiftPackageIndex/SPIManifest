@@ -508,4 +508,34 @@ class ManifestTests: XCTestCase {
         )
     }
 
+    func test_os_dependencies() throws {
+        // Ensure we interpret platform key `macos` as `macos-spm`
+        // https://github.com/SwiftPackageIndex/SPIManifest/issues/11
+        Current.fileManager.fileExists = { _ in true }
+        Current.fileManager.contents = { _ in
+            Data(
+                """
+                version: 1
+                builder:
+                  configs:
+                  - platform: macos
+                    os_dependencies: [foo, bar]
+                """.utf8
+            )
+        }
+
+        // MUT
+        let m = try XCTUnwrap(Manifest.load())
+
+        // validation
+        XCTAssertEqual(m,
+                       Manifest(builder: .init(configs: [
+                        .init(platform: Platform.macosSpm.rawValue,
+                              osDependencies: ["foo", "bar"])
+                       ]))
+        )
+        XCTAssertNil(m.config(for: .iOS, \.osDependencies))
+        XCTAssertEqual(m.config(for: .macosSpm, \.osDependencies), ["foo", "bar"])
+    }
+
 }
