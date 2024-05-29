@@ -11,7 +11,7 @@ enum Validator {
     static func main() {
         guard CommandLine.arguments.count == 2,
               let path = CommandLine.arguments.last else {
-            print("Usage: spi-manifest-validate <.spi.yml file>")
+            print("Usage: validate-spi-manifest <.spi.yml file>")
             exit(1)
         }
 
