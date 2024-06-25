@@ -57,7 +57,7 @@ version: 1
 builder:
     configs:
     - documentation_targets: [Target]
-      custom_documentation_parameters: [--include-extended-types]
+      custom_documentation_parameters: [--some-custom-parameter]
 ```
 
 The provided flags will be added to the `swift package generate-documentation` call when generating documentation via SPM (default).
