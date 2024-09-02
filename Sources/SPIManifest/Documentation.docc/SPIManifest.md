@@ -4,9 +4,8 @@ Control how the Swift Package Index indexes your package.
 
 ## Overview
 
-SPIManifest is a Swift package to decode the Swift Package Index Manifest file `.spi.yml` which Swift package authors can add to their repository.
-
-This allows authors a level of control over package processing by the Swift Package Index.
+SPIManifest is a Swift package to decode the Swift Package Index Manifest file `.spi.yml`, which Swift package authors 
+can add to their repository. This allows authors a level of control over package processing by the Swift Package Index.
 
 ### Common Use Cases
 
@@ -18,11 +17,9 @@ Here are some examples of things that can be configured by this file:
 
 ### Validation
 
-Swift Package Index manifests can be validated for correctness via the [Online Validator](https://swiftpackageindex.com/validate-spi-manifest) or via an executable that comes with this package. See
+Swift Package Index manifests can be validated for correctness via the [Online Validator](https://swiftpackageindex.com/validate-spi-manifest). 
 
-- <doc:ManifestValidation>
-
-for more details.
+See <doc:ManifestValidation> for more details.
 
 ## Topics
 
@@ -30,6 +27,5 @@ for more details.
 
 - <doc:CommonUseCases>
 - <doc:ManifestValidation>
-- <doc:Validation>
 - <doc:MailMapFile>
 - ``Manifest``
