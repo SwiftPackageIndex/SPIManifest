@@ -31,4 +31,5 @@ for more details.
 - <doc:CommonUseCases>
 - <doc:ManifestValidation>
 - <doc:Validation>
+- <doc:MailMapFile>
 - ``Manifest``
