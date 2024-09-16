@@ -20,14 +20,12 @@ let package = Package(
     name: "SPIManifest",
     platforms: [.macOS(.v10_15)],
     products: [
-        .executable(name: "validate-spi-manifest", targets: ["validate-spi-manifest"]),
         .library(name: "SPIManifest", targets: ["SPIManifest"]),
     ],
     dependencies: [
         .package(url: "https://github.com/jpsim/Yams.git", "4.0.0"..<"6.0.0"),
     ],
     targets: [
-        .executableTarget(name: "validate-spi-manifest", dependencies: ["SPIManifest"]),
         .target(name: "SPIManifest", dependencies: ["Yams"]),
         .testTarget(name: "SPIManifestTests", dependencies: ["SPIManifest"]),
     ]
