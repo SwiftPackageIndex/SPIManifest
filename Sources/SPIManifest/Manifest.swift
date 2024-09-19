@@ -289,6 +289,9 @@ extension Manifest {
 
     public func customDocumentationParameters(platform: Platform, swiftVersion: SwiftVersion) -> [String]? {
         self[platform, swiftVersion, \.customDocumentationParameters]?.compactMap { $0 }
+            .flatMap { $0.components(separatedBy: .whitespaces) }
+            .filter { $0.count > 0 }
+            .map { String($0) }
     }
 
     public func scheme(for platform: Platform) -> String? {
