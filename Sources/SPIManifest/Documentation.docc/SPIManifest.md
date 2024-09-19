@@ -18,7 +18,7 @@ Here are some examples of things that can be configured by this file:
 
 ### Validation
 
-Swift Package Index manifests can be validated for correctness via the [Online Validator](https://swiftpackageindex.com/validate-spi-manifest) or via an executable that comes with this package. See
+Swift Package Index manifests can be validated for correctness via the [Online Validator](https://swiftpackageindex.com/validate-spi-manifest). See
 
 - <doc:ManifestValidation>
 
