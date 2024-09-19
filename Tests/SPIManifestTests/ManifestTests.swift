@@ -508,4 +508,23 @@ class ManifestTests: XCTestCase {
         )
     }
 
+    func test_customDocumentationParameters_splitParameters() throws {
+        let m = try Manifest(yml: """
+            version: 1
+            builder:
+              configs:
+              - documentation_targets: [t0]
+                custom_documentation_parameters:
+                - a b
+                - c  d
+                - e
+            """
+        )
+
+        XCTAssertEqual(
+            m.customDocumentationParameters(platform: .macosSpm, swiftVersion: .latestRelease),
+            ["a", "b", "c", "d", "e"]
+        )
+    }
+
 }
