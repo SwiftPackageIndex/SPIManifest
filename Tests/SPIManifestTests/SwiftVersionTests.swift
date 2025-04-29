@@ -26,8 +26,8 @@ class SwiftVersionTests: XCTestCase {
     func test_isLatestRelease() throws {
         XCTAssertEqual(SwiftVersion.v5_9.isLatestRelease, false)
         XCTAssertEqual(SwiftVersion.v5_10.isLatestRelease, false)
-        XCTAssertEqual(SwiftVersion.v6_0.isLatestRelease, false)
-        XCTAssertEqual(SwiftVersion.v6_1.isLatestRelease, true)
+        XCTAssertEqual(SwiftVersion.v6_0.isLatestRelease, true)
+        XCTAssertEqual(SwiftVersion.v6_1.isLatestRelease, false)
     }
 
     func test_Comparable() throws {
