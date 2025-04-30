@@ -332,11 +332,11 @@ class ManifestTests: XCTestCase {
         for platform in Platform.allCases {
             for swiftVersion in SwiftVersion.allCases {
                 switch (platform, swiftVersion) {
-                    case (.macosSpm, .v6_0):
+                    case (.macosSpm, .v6_1):
                         XCTAssertEqual(m.documentationTargets(platform: platform, swiftVersion: swiftVersion), ["t0"])
-                    case (.iOS, .v6_0):
+                    case (.iOS, .v6_1):
                         XCTAssertEqual(m.documentationTargets(platform: platform, swiftVersion: swiftVersion), ["t1"])
-                    case (.watchOS, .v6_0):
+                    case (.watchOS, .v6_1):
                         XCTAssertEqual(m.documentationTargets(platform: platform, swiftVersion: swiftVersion), ["t2"])
                     case (.watchOS, .v5_9):
                         XCTAssertEqual(m.documentationTargets(platform: platform, swiftVersion: swiftVersion), ["t3"])
