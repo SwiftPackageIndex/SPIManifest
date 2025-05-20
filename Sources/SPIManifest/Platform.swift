@@ -13,6 +13,7 @@
 // limitations under the License.
 
 public enum Platform: String, Codable, CaseIterable {
+    case android
     case iOS                = "ios"
     case linux
     case macosSpm           = "macos-spm"
