@@ -23,7 +23,7 @@ let package = Package(
         .library(name: "SPIManifest", targets: ["SPIManifest"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/jpsim/Yams.git", "4.0.0"..<"6.0.0"),
+        .package(url: "https://github.com/jpsim/Yams.git", "4.0.0"..<"7.0.0"),
     ],
     targets: [
         .target(name: "SPIManifest", dependencies: ["Yams"]),
