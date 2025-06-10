@@ -16,10 +16,10 @@ public typealias ShortVersion = String
 
 
 public enum SwiftVersion: ShortVersion, Codable, CaseIterable {
-    case v5_9 = "5.9"
     case v5_10 = "5.10"
     case v6_0 = "6.0"
     case v6_1 = "6.1"
+    case v6_2 = "6.2"
 
     public static var latestRelease: Self { .v6_1 }
 
