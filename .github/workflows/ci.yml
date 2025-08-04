@@ -14,14 +14,14 @@ jobs:
         swift-version: ['6.0.0', '6.1.0']
     runs-on: ${{ matrix.os }}
     steps:
-        - uses: actions/checkout@v4
-        - uses: swift-actions/setup-swift@v2
-          with:
-            swift-version: ${{ matrix.swift-version }}
-        - name: Echo Swift version
-          run: swift --version
-        - name: Check a Release build
-          run: swift build --disable-automatic-resolution -c release
+      - uses: actions/checkout@v4
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: ${{ matrix.swift-version }}
+      - name: Echo Swift version
+        run: swift --version
+      - name: Check a Release build
+        run: swift build --disable-automatic-resolution -c release
 
   test:
     strategy:
