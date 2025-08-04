@@ -83,6 +83,16 @@ builder:
 
 There is also a `target:` key in order to configure a specific target instead of a scheme, where applicable.
 
+### Implementing custom package logic with SPI_PROCESSING
+
+When the Swift Package Index processes your package, you’ll find the `SPI_PROCESSING` environment variable set during all processessing, in particular the following:
+
+- **Analysis**: Swift Package Index extracts package metadata by running `swift package dump-package`. Packages _must_ pass analysis to be included in the index.
+- **Compatibility builds**: Swift Package Index runs either `swift build` or `xcodebuild` to determine Swift version and platform compatibility.
+
+See the [swift-java](https://swiftpackageindex.com/swiftlang/swift-java) package for an example of a package using this feature, where the authors [bypass a JDK requirement](https://github.com/swiftlang/swift-java/blob/a3791cf7c94146a34f96fd9ad53efef9d58c2a1b/Package.swift#L35) during analysis. Without this exception, the Swift Package Index analysis machines couldn’t successfully run `swift package dump-package`.
+
+In addition, the variable `SPI_BUILD` is set exclusively during the compatibility build phase. This allows package authors to include specific package manifest configurations for builds in the context of the Swift Package Index. Again, the [swift-java](https://swiftpackageindex.com/swiftlang/swift-java) package is an example of a package making use of this capability.
 
 ## Images for Linux
 
