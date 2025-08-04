@@ -11,12 +11,13 @@ jobs:
       matrix:
         # https://github.com/actions/virtual-environments
         os: [macos-latest, ubuntu-latest]
+        swift-version: ['6.0', '6.1']
     runs-on: ${{ matrix.os }}
     steps:
         - uses: actions/checkout@v4
-        - uses: swift-actions/setup-swift@v2
+        - uses: fwal/setup-swift@v2
           with:
-            swift-version: "6.0"
+            swift-version: ${{ matrix.swift-version }}
         - name: Echo Swift version
           run: swift --version
         - name: Check a Release build
@@ -27,12 +28,13 @@ jobs:
       matrix:
         # https://github.com/actions/virtual-environments
         os: [macos-latest, ubuntu-latest]
+        swift-version: ['6.0', '6.1']
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - uses: swift-actions/setup-swift@v2
+      - uses: fwal/setup-swift@v2
         with:
-          swift-version: "6.0"
+          swift-version: ${{ matrix.swift-version }}
       - name: Echo Swift version
         run: swift --version
       - name: Test
