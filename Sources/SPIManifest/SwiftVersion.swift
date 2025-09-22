@@ -21,7 +21,7 @@ public enum SwiftVersion: ShortVersion, Codable, CaseIterable {
     case v6_1 = "6.1"
     case v6_2 = "6.2"
 
-    public static var latestRelease: Self { .v6_1 }
+    public static var latestRelease: Self { .v6_2 }
 
     public init?(major: Int, minor: Int) {
         self.init(rawValue: "\(major).\(minor)")
