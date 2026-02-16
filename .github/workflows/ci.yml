@@ -18,6 +18,7 @@ jobs:
       - uses: swift-actions/setup-swift@v3
         with:
           swift-version: ${{ matrix.swift-version }}
+          skip-verify-signature: true
       - name: Echo Swift version
         run: swift --version
       - name: Check a Release build
@@ -35,6 +36,7 @@ jobs:
       - uses: swift-actions/setup-swift@v3
         with:
           swift-version: ${{ matrix.swift-version }}
+          skip-verify-signature: true
       - name: Echo Swift version
         run: swift --version
       - name: Test
