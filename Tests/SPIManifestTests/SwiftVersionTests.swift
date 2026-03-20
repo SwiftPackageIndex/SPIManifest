@@ -19,21 +19,21 @@ import XCTest
 class SwiftVersionTests: XCTestCase {
 
     func test_init() throws {
-        XCTAssertEqual(SwiftVersion(major: 5, minor: 10), .v5_10)
+        XCTAssertEqual(SwiftVersion(major: 6, minor: 3), .v6_3)
         XCTAssertEqual(SwiftVersion(major: 5, minor: 5), nil)
     }
 
     func test_isLatestRelease() throws {
-        XCTAssertEqual(SwiftVersion.v5_10.isLatestRelease, false)
         XCTAssertEqual(SwiftVersion.v6_0.isLatestRelease, false)
         XCTAssertEqual(SwiftVersion.v6_1.isLatestRelease, false)
-        XCTAssertEqual(SwiftVersion.v6_2.isLatestRelease, true)
+        XCTAssertEqual(SwiftVersion.v6_2.isLatestRelease, false)
+        XCTAssertEqual(SwiftVersion.v6_3.isLatestRelease, true)
     }
 
     func test_Comparable() throws {
+        XCTAssert(SwiftVersion.v6_3 > .v6_2)
         XCTAssert(SwiftVersion.v6_2 > .v6_1)
         XCTAssert(SwiftVersion.v6_1 > .v6_0)
-        XCTAssert(SwiftVersion.v6_0 > .v5_10)
     }
 
 }
