@@ -101,12 +101,12 @@ Package authors can also use the `.spi.yml` file to configure custom docker base
 We build packages for Linux with docker commands using our own images based on the official Swift docker images:
 
 ```bash
-docker run --rm -v "$PWD":/host -w /host registry.gitlab.com/finestructure/spi-images:basic-5.8-latest swift build
+docker run --rm -v "$PWD":/host -w /host registry.gitlab.com/SwiftPackageIndex/spi-images:basic-5.8-latest swift build
 ```
 
-Our default image comes with a few dependencies pre-installed which you can review via its [`Dockerfile`](https://gitlab.com/finestructure/spi-images/-/blob/main/Dockerfile).
+Our default image comes with a few dependencies pre-installed which you can review via its [`Dockerfile`](https://gitlab.com/SwiftPackageIndex/spi-images/-/blob/main/Dockerfile).
 
-There might also be other, more specialised `Dockerfiles` that match your dependencies, for example [`Dockerfile.AppKid`](https://gitlab.com/finestructure/spi-images/-/blob/main/Dockerfile.AppKid). It may be worth reviewing the `Dockerfile`s in the [`spi-images` repository for matches](https://gitlab.com/finestructure/spi-images/-/tree/main).
+There might also be other, more specialised `Dockerfiles` that match your dependencies, for example [`Dockerfile.AppKid`](https://gitlab.com/SwiftPackageIndex/spi-images/-/blob/main/Dockerfile.AppKid). It may be worth reviewing the `Dockerfile`s in the [`spi-images` repository for matches](https://gitlab.com/SwiftPackageIndex/spi-images/-/tree/main).
 
 As mentioned above, we are referencing the basic image by default, so if `Dockerfile` matches your requirements you do not need to add an `image:` clause to your `.spi.yml` file at all.
 
@@ -118,13 +118,13 @@ builder:
   configs:
   - platform: linux
     swift_version: '5.8'
-    image: registry.gitlab.com/finestructure/spi-images:AppKid-5.8-latest
+    image: registry.gitlab.com/SwiftPackageIndex/spi-images:AppKid-5.8-latest
 ```
 
 Effectively, the image name is based on the `Dockerfile` suffix:
 
 ```
-registry.gitlab.com/finestructure/spi-images:${SUFFIX}-5.8-latest
+registry.gitlab.com/SwiftPackageIndex/spi-images:${SUFFIX}-5.8-latest
 ```
 
 If your package requires additional dependencies not covered by any of the existing images, please [open an issue](https://github.com/SwiftPackageIndex/SwiftPackageIndex-Server/issues/new/choose) so that we can either add them to the basic image if they are of a general nature or create a new specialized image.
