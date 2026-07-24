@@ -160,11 +160,11 @@ class ManifestTests: XCTestCase {
         do {  // pick specific swift version over nil one
             let m = Manifest(builder: .init(configs: [
                 .init(platform: Platform.iOS.rawValue, scheme: "scheme-1"),
-                .init(platform: Platform.iOS.rawValue, swiftVersion: "6.0", scheme: "scheme-2")
+                .init(platform: Platform.iOS.rawValue, swiftVersion: "6.4", scheme: "scheme-2")
             ]))
 
             // MUT
-            XCTAssertEqual(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v6_0))?.scheme, "scheme-2")
+            XCTAssertEqual(m.config(platform: .specific(.iOS), swiftVersion: .specific(.v6_4))?.scheme, "scheme-2")
         }
     }
 
