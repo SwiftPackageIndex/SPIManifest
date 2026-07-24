@@ -51,7 +51,7 @@ jobs:
       - name: Check a Release build
         run: swift build --disable-automatic-resolution -c release
 
-  test:
+  test-linux:
     strategy:
       matrix:
         # https://github.com/actions/virtual-environments
@@ -64,6 +64,33 @@ jobs:
         with:
           swift-version: ${{ matrix.swift-version }}
           skip-verify-signature: true
+      - name: Echo Swift version
+        run: swift --version
+      - name: Test
+        run: swift test --disable-automatic-resolution
+
+  test-macos:
+    strategy:
+      matrix:
+        # https://github.com/actions/virtual-environments
+        os: [macos-26]
+        swift-version: ['6.2', '6.3']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: swift-actions/setup-swift@v3
+        with:
+          swift-version: ${{ matrix.swift-version }}
+          skip-verify-signature: true
+      - name: Echo Swift version
+        run: swift --version
+      - name: Test
+        run: swift test --disable-automatic-resolution
+
+  test-macos-6.1:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
       - name: Echo Swift version
         run: swift --version
       - name: Test
