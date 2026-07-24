@@ -42,7 +42,7 @@ jobs:
       - name: Check a Release build
         run: swift build --disable-automatic-resolution -c release
 
-  build-release-macos-6.1:
+  build-release-macos-6-1:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v7
