@@ -87,7 +87,7 @@ jobs:
       - name: Test
         run: swift test --disable-automatic-resolution
 
-  test-macos-6.1:
+  test-macos-6-1:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v7
