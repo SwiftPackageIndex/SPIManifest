@@ -16,7 +16,6 @@ public typealias ShortVersion = String
 
 
 public enum SwiftVersion: ShortVersion, Codable, CaseIterable {
-    case v6_1 = "6.1"
     case v6_2 = "6.2"
     case v6_3 = "6.3"
     case v6_4 = "6.4"
